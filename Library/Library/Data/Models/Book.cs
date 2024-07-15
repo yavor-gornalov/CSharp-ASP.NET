@@ -22,7 +22,11 @@ public class Book
 	[MaxLength(BookAuthorMaxLength)]
 	public string Author { get; set; } = null!;
 
-	[Comment("Description of the book")]
+	[Comment("Image of the book")]
+	[Required]
+    public string ImageUrl { get; set; } = null!;
+
+    [Comment("Description of the book")]
 	[Required]
 	[MaxLength(BookDescriptionMaxLength)]
 	public string Description { get; set; } = null!;

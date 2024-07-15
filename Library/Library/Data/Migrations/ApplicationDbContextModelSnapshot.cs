@@ -47,6 +47,11 @@ namespace Library.Data.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasComment("Description of the book");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("Image of the book");
+
                     b.Property<decimal>("Rating")
                         .HasPrecision(4, 2)
                         .HasColumnType("decimal(4,2)")
@@ -62,9 +67,21 @@ namespace Library.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Book");
+                    b.ToTable("Books");
 
                     b.HasComment("Library Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 5,
+                            Author = "Dolor Sit",
+                            CategoryId = 1,
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                            ImageUrl = "https://img.freepik.com/free-psd/book-cover-mock-up-arrangement_23-2148622888.jpg?w=826&t=st=1666106877~exp=1666107477~hmac=5dea3e5634804683bccfebeffdbde98371db37bc2d1a208f074292c862775e1b",
+                            Rating = 9.5m,
+                            Title = "Lorem Ipsum"
+                        });
                 });
 
             modelBuilder.Entity("Library.Data.Models.Category", b =>
@@ -84,7 +101,34 @@ namespace Library.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Biography"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Children"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Crime"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Fantasy"
+                        });
                 });
 
             modelBuilder.Entity("Library.Data.Models.IdentityUserBook", b =>
@@ -101,7 +145,7 @@ namespace Library.Data.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("IdentityUserBook");
+                    b.ToTable("UsersBooks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
