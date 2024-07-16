@@ -1,4 +1,5 @@
-﻿@model AddBookViewModel
+﻿@using static Library.Common.GlobalConstants
+@model AddBookViewModel
 
 @{
     ViewBag.Title = "Edit Book";
@@ -32,7 +33,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Rating" class="form-label">Rating</label>
-                <input type="number" asp-for="Rating" class="form-control" value=@Model.Rating />
+                <input type="number" min=@BookRatingLowLimit max=@BookRatingHighLimit step=0.1 asp-for="Rating" class="form-control" value=@Model.Rating />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
             <div class="mb-3">
