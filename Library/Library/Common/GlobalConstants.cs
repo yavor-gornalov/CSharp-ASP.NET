@@ -13,7 +13,7 @@ public static class GlobalConstants
 	public const int BookDescriptionMaxLength = 5000;
 
 	public const double BookRatingLowLimit = 0.0;
-	public const double BookRatingHighLimit = double.MaxValue;
+	public const double BookRatingHighLimit = 10.0;
 
 	// Category
 	public const int CategoryNameMinLength = 5;
