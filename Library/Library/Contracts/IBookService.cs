@@ -20,4 +20,6 @@ public interface IBookService
 	Task DetachhBookFormCollector(int bookId, string collectorId);
 
 	Task EditBookAsync(AddBookViewModel model, int id);
+
+	Task DeleteBookAsync(int bookId);
 }

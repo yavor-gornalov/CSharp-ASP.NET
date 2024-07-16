@@ -61,10 +61,10 @@ public class BookController : BaseController
 	}
 
 	[HttpGet]
-	public async Task<IActionResult> Edit(int id) 
+	public async Task<IActionResult> Edit(int id)
 	{
 		AddBookViewModel? model = await bookService.GetBookById(id);
-		
+
 		if (model != null)
 		{
 			var categories = await bookService.GetAllCategoriesAsync();
@@ -111,5 +111,12 @@ public class BookController : BaseController
 		}
 
 		return RedirectToAction(nameof(Mine));
+	}
+
+	public async Task<IActionResult> Delete(int id)
+	{
+		await bookService.DeleteBookAsync(id);
+
+		return RedirectToAction(nameof(All));
 	}
 }

@@ -22,6 +22,7 @@ public class BookService : IBookService
 			Author = addBookViewModel.Author,
 			Title = addBookViewModel.Title,
 			Description = addBookViewModel.Description,
+			Rating = addBookViewModel.Rating,
 			ImageUrl = addBookViewModel.Url,
 			CategoryId = addBookViewModel.CategoryId,
 		};
@@ -48,6 +49,28 @@ public class BookService : IBookService
 		}
 	}
 
+	public async Task DeleteBookAsync(int bookId)
+	{
+		var usersBooksToRemove = await context.UsersBooks
+			.Where(ub => ub.BookId == bookId)
+			.ToListAsync();
+
+		if (usersBooksToRemove != null)
+		{
+			context.RemoveRange(usersBooksToRemove);
+		}
+
+		var bookToRemove = await context.Books
+			.FindAsync(bookId);
+
+		if (bookToRemove != null)
+		{
+			context.Books.Remove(bookToRemove);
+		}
+
+		context.SaveChanges();
+	}
+
 	public async Task DetachhBookFormCollector(int bookId, string collectorId)
 	{
 		var book = await context.UsersBooks
@@ -69,6 +92,7 @@ public class BookService : IBookService
 			book.Title = model.Title;
 			book.Author = model.Author;
 			book.Description = model.Description;
+			book.ImageUrl = model.Url;
 			book.Rating = model.Rating;
 			book.CategoryId = model.CategoryId;
 
