@@ -32,7 +32,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Rating" class="form-label">Rating</label>
-                <input type="number" asp-for="Rating" class="form-control" value="" />
+                <input type="number" asp-for="Rating" class="form-control" value=@Model.Rating />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
             <div class="mb-3">
