@@ -30,6 +30,37 @@ public class BookService : IBookService
 		await context.SaveChangesAsync();
 	}
 
+	public async Task AttachBookToCollector(int bookId, string collectorId)
+	{
+		var book = await context.UsersBooks
+			.FirstOrDefaultAsync(ub => ub.BookId == bookId && ub.CollectorId == collectorId);
+
+		if (book == null)
+		{
+			var userBook = new IdentityUserBook
+			{
+				BookId = bookId,
+				CollectorId = collectorId
+			};
+
+
+
+			await context.UsersBooks.AddAsync(userBook);
+			await context.SaveChangesAsync();
+		}
+	}
+
+	public async Task DetachhBookFormCollector(int bookId, string collectorId)
+	{
+		var book = await context.UsersBooks
+			.FirstOrDefaultAsync(ub => ub.BookId == bookId && ub.CollectorId == collectorId);
+
+		if (book == null) return;
+
+		context.UsersBooks.Remove(book);
+		await context.SaveChangesAsync();
+	}
+
 	public async Task<IEnumerable<AllBookViewModel>> GetAllBooksAsync()
 	{
 		return await context.Books
@@ -47,7 +78,7 @@ public class BookService : IBookService
 			.ToListAsync();
 	}
 
-	public async Task<IEnumerable<CategoryViewModel>> GetCategoriesAsync()
+	public async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync()
 	{
 		return await context.Categories
 			.Select(c => new CategoryViewModel
@@ -76,4 +107,5 @@ public class BookService : IBookService
 			.AsNoTracking()
 			.ToListAsync();
 	}
+
 }
