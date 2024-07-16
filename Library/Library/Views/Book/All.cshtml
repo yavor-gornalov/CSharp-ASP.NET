@@ -23,6 +23,7 @@
 
 			<form class="input-group-sm" asp-controller="Book" asp-action="AddToCollection" asp-route-id="@book.Id">
 				<input type="submit" value="Add to Collection" class="fs-6 btn btn-success mb-3 p-2" />
+				<a class="fs-6 btn btn-danger mb-3 p-2" asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id">Edit Book</a>
 			</form>
 		</div>
 	}

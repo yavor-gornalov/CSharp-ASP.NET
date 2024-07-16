@@ -7,6 +7,8 @@ public interface IBookService
 {
 	Task<IEnumerable<AllBookViewModel>> GetAllBooksAsync();
 
+	Task<AddBookViewModel?> GetBookById(int bookId);
+
 	Task<IEnumerable<AllBookViewModel>> GetCollectorBooksAsync(string collectorId);
 
 	Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync();
@@ -14,5 +16,8 @@ public interface IBookService
 	Task AddBookAsync(AddBookViewModel addBookViewModel);
 
 	Task AttachBookToCollector(int bookId, string collectorId);
+
 	Task DetachhBookFormCollector(int bookId, string collectorId);
+
+	Task EditBookAsync(AddBookViewModel model, int id);
 }

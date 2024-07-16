@@ -43,8 +43,6 @@ public class BookService : IBookService
 				CollectorId = collectorId
 			};
 
-
-
 			await context.UsersBooks.AddAsync(userBook);
 			await context.SaveChangesAsync();
 		}
@@ -59,6 +57,23 @@ public class BookService : IBookService
 
 		context.UsersBooks.Remove(book);
 		await context.SaveChangesAsync();
+	}
+
+	public async Task EditBookAsync(AddBookViewModel model, int id)
+	{
+		var book = await context.Books
+			.FindAsync(id);
+
+		if (book != null)
+		{
+			book.Title = model.Title;
+			book.Author = model.Author;
+			book.Description = model.Description;
+			book.Rating = model.Rating;
+			book.CategoryId = model.CategoryId;
+
+			await context.SaveChangesAsync();
+		}
 	}
 
 	public async Task<IEnumerable<AllBookViewModel>> GetAllBooksAsync()
@@ -88,6 +103,24 @@ public class BookService : IBookService
 			})
 			.AsNoTracking()
 			.ToListAsync();
+	}
+
+	public async Task<AddBookViewModel?> GetBookById(int bookId)
+	{
+		var book = await context.Books
+			.FirstOrDefaultAsync(b => b.Id == bookId);
+
+		if (book == null)
+			throw new ArgumentException("Invalid book id");
+
+		return new AddBookViewModel
+		{
+			Author = book.Author,
+			Title = book.Title,
+			Description = book.Description,
+			Url = book.ImageUrl,
+			Rating = book.Rating,
+		};
 	}
 
 	public async Task<IEnumerable<AllBookViewModel>> GetCollectorBooksAsync(string collectorId)

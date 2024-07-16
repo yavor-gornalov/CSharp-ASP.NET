@@ -60,6 +60,33 @@ public class BookController : BaseController
 		return RedirectToAction(nameof(All));
 	}
 
+	[HttpGet]
+	public async Task<IActionResult> Edit(int id) 
+	{
+		AddBookViewModel? model = await bookService.GetBookById(id);
+		
+		if (model != null)
+		{
+			var categories = await bookService.GetAllCategoriesAsync();
+			model.Categories = categories.ToList();
+		}
+
+		return View(model);
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Edit(int id, AddBookViewModel model)
+	{
+		if (!ModelState.IsValid)
+		{
+			return View(model);
+		}
+
+		await bookService.EditBookAsync(model, id);
+
+		return RedirectToAction(nameof(All));
+	}
+
 	[HttpPost]
 	public async Task<IActionResult> AddToCollection(int id)
 	{
