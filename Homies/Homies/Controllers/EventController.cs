@@ -56,5 +56,25 @@ namespace Homies.Controllers
 				return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 			}
 		}
+
+		public async Task<IActionResult> Join(int id)
+		{
+			try
+			{
+				var participantId = GetUserId();
+				await eventService.AddEventToUserCollectionAsync(id, participantId);
+
+				return RedirectToAction(nameof(Joined));
+			}
+			catch (ArgumentException ex)
+			{
+				return RedirectToAction(nameof(All));
+			}
+		}
+
+		public async Task<IActionResult> Joined(string userId)
+		{
+			return View();
+		}
 	}
 }

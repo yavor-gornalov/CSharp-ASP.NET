@@ -2,8 +2,9 @@
 using Homies.Data;
 using Homies.Data.Models;
 using Homies.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using System.Reflection.Metadata;
 using static Homies.Common.GlobalConstants;
 
 namespace Homies.Services;
@@ -34,6 +35,29 @@ public class EventService : IEventService
 		await context.SaveChangesAsync();
 	}
 
+	public async Task AddEventToUserCollectionAsync(int eventId, string userId)
+	{
+		var currentEvent = await context.Events
+			.Include(e => e.EventsParticipants)
+			.Where(e => e.Id == eventId)
+			.FirstAsync();
+
+		if (currentEvent == null)
+			throw new ArgumentException("Invalid event");
+
+		if (currentEvent.EventsParticipants.Any(ep => ep.HelperId == userId))
+			throw new ArgumentException("This user already participate in this event");
+
+		var newParticipant = new EventParticipant
+		{
+			EventId = eventId,
+			HelperId = userId,
+		};
+
+		currentEvent.EventsParticipants.Add(newParticipant);
+		await context.SaveChangesAsync();
+	}
+
 	public async Task<ICollection<EventViewModel>> GetAllEventsAsync()
 	{
 		return await context.Events
@@ -57,6 +81,23 @@ public class EventService : IEventService
 			{
 				Id = t.Id,
 				Name = t.Name,
+			})
+			.AsNoTracking()
+			.ToListAsync();
+	}
+
+	public async Task<ICollection<EventViewModel>> GetUserEventsAsync(string userId)
+	{
+		return await context.Events
+			.Where(e => e.EventsParticipants.Any(ep => ep.HelperId == userId))
+			.Select(e => new EventViewModel
+			{
+				Id = e.Id,
+				Name = e.Name,
+				Description = e.Description,
+				Organiser = e.Organiser.UserName,
+				Start = e.Start.ToString(DateTimeDefaultFormat),
+				Type = e.Type.Name
 			})
 			.AsNoTracking()
 			.ToListAsync();
