@@ -72,9 +72,17 @@ namespace Homies.Controllers
 			}
 		}
 
-		public async Task<IActionResult> Joined(string userId)
+		public async Task<IActionResult> Joined()
 		{
-			return View();
+			var userId = GetUserId();
+			if (userId == null)
+			{
+				return Unauthorized();
+			}
+
+			var userEvents = await eventService.GetUserEventsAsync(userId);
+
+			return View(userEvents);
 		}
 	}
 }
