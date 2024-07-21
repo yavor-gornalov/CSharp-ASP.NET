@@ -11,7 +11,11 @@ public interface IEventService
 
 	Task AddEventAsync(AddEventViewModel eventViewModel, string organiserId);
 
+	Task EditEventAsync(AddEventViewModel eventViewModel, int eventId, string userId);
+
 	Task AddEventToUserCollectionAsync(int eventId, string userId);
+
+	Task RemoveEventFromUserCollectionAsync(int eventId, string userId);
 
 	Task<ICollection<EventViewModel>> GetUserEventsAsync(string userId);
 }

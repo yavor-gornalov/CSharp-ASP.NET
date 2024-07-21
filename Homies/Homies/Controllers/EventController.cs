@@ -84,5 +84,29 @@ namespace Homies.Controllers
 
 			return View(userEvents);
 		}
+
+		public async Task<IActionResult> Leave(int id)
+		{
+
+			try
+			{
+				var userId = GetUserId();
+				await eventService.RemoveEventFromUserCollectionAsync(id, userId);
+				return RedirectToAction(nameof(All));
+			}
+			catch (ArgumentException ex)
+			{
+				return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+			}
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Edit(int id)
+		{
+			var model = new AddEventViewModel();
+			model.Types = await eventService.GetAllEventTypesAsync();
+
+			return View(model);
+		}
 	}
 }

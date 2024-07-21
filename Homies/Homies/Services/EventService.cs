@@ -58,6 +58,11 @@ public class EventService : IEventService
 		await context.SaveChangesAsync();
 	}
 
+	public Task EditEventAsync(AddEventViewModel eventViewModel, int eventId, string userId)
+	{
+		throw new NotImplementedException();
+	}
+
 	public async Task<ICollection<EventViewModel>> GetAllEventsAsync()
 	{
 		return await context.Events
@@ -101,5 +106,25 @@ public class EventService : IEventService
 			})
 			.AsNoTracking()
 			.ToListAsync();
+	}
+
+	public async Task RemoveEventFromUserCollectionAsync(int eventId, string userId)
+	{
+		var currentEvent = await context.Events
+			.Include(e => e.EventsParticipants)
+			.FirstOrDefaultAsync(e => e.Id == eventId);
+
+		if (currentEvent == null)
+			throw new ArgumentException("Invalid event");
+
+		if (!currentEvent.EventsParticipants.Any(ep => ep.HelperId == userId))
+			throw new ArgumentException("Invalid helper");
+
+		var participant = currentEvent.EventsParticipants
+			.First(ep => ep.HelperId == userId);
+
+		currentEvent.EventsParticipants.Remove(participant);
+
+		await context.SaveChangesAsync();
 	}
 }
