@@ -2,9 +2,7 @@
 using Homies.Data;
 using Homies.Data.Models;
 using Homies.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 using static Homies.Common.GlobalConstants;
 
 namespace Homies.Services;
@@ -58,9 +56,25 @@ public class EventService : IEventService
 		await context.SaveChangesAsync();
 	}
 
-	public Task EditEventAsync(AddEventViewModel eventViewModel, int eventId, string userId)
+	public async Task EditEventAsync(AddEventViewModel eventViewModel, int eventId, string userId)
 	{
-		throw new NotImplementedException();
+		var eventToEdit = await context.Events
+			.FindAsync(eventId);
+
+		if (eventToEdit == null)
+			throw new ArgumentException("Invalid event");
+
+		if (eventToEdit.OrganiserId != userId)
+			throw new ArgumentException("No permissions to edit this event");
+
+		eventToEdit.Name = eventViewModel.Name;
+		eventToEdit.Description = eventViewModel.Description;
+		eventToEdit.Start = eventViewModel.Start;
+		eventToEdit.End = eventViewModel.End;
+		eventToEdit.TypeId = eventViewModel.TypeId;
+
+		await context.SaveChangesAsync();
+
 	}
 
 	public async Task<ICollection<EventViewModel>> GetAllEventsAsync()
@@ -89,6 +103,22 @@ public class EventService : IEventService
 			})
 			.AsNoTracking()
 			.ToListAsync();
+	}
+
+	public async Task<AddEventViewModel?> GetEventByIdAsync(int eventId)
+	{
+		return await context.Events
+			.Where(e => e.Id == eventId)
+			.Select(e => new AddEventViewModel
+			{
+				Name = e.Name,
+				Description = e.Description,
+				Start = e.Start,
+				End = e.End,
+				TypeId = e.TypeId
+			})
+			.AsNoTracking()
+			.FirstOrDefaultAsync();
 	}
 
 	public async Task<ICollection<EventViewModel>> GetUserEventsAsync(string userId)

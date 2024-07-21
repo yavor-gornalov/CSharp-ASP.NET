@@ -66,7 +66,7 @@ namespace Homies.Controllers
 
 				return RedirectToAction(nameof(Joined));
 			}
-			catch (ArgumentException ex)
+			catch (ArgumentException)
 			{
 				return RedirectToAction(nameof(All));
 			}
@@ -94,7 +94,7 @@ namespace Homies.Controllers
 				await eventService.RemoveEventFromUserCollectionAsync(id, userId);
 				return RedirectToAction(nameof(All));
 			}
-			catch (ArgumentException ex)
+			catch (ArgumentException)
 			{
 				return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 			}
@@ -103,10 +103,41 @@ namespace Homies.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(int id)
 		{
-			var model = new AddEventViewModel();
+			var model = await eventService.GetEventByIdAsync(id);
+
+			if (model == null)
+			{
+				return RedirectToAction(nameof(All));
+			}
+
 			model.Types = await eventService.GetAllEventTypesAsync();
 
 			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(int id, AddEventViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			var userId = GetUserId();
+			if (userId == null)
+			{
+				return Unauthorized();
+			}
+
+			try
+			{
+				await eventService.EditEventAsync(model, id, userId);
+			}
+			catch
+			{
+
+			}
+			return RedirectToAction(nameof(All));
 		}
 	}
 }

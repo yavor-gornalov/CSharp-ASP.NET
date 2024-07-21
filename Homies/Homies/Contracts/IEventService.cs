@@ -1,4 +1,5 @@
-﻿using Homies.Models;
+﻿using Homies.Data.Models;
+using Homies.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Homies.Contracts;
@@ -6,6 +7,8 @@ namespace Homies.Contracts;
 public interface IEventService
 {
 	Task<ICollection<EventViewModel>> GetAllEventsAsync();
+
+	Task<AddEventViewModel?> GetEventByIdAsync(int eventId);
 
 	Task<ICollection<EventTypeViewModel>> GetAllEventTypesAsync();
 
