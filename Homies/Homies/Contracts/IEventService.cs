@@ -9,6 +9,8 @@ public interface IEventService
 	Task<ICollection<EventViewModel>> GetAllEventsAsync();
 
 	Task<AddEventViewModel?> GetEventByIdAsync(int eventId);
+	
+	Task<EventDetailsViewModel?> GetEventDetailsAsync(int eventId);
 
 	Task<ICollection<EventTypeViewModel>> GetAllEventTypesAsync();
 

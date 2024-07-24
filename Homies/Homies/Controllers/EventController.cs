@@ -139,5 +139,18 @@ namespace Homies.Controllers
 			}
 			return RedirectToAction(nameof(All));
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> Details(int id)
+		{
+			var currentEvent = await eventService.GetEventDetailsAsync(id);
+
+			if (currentEvent == null)
+			{
+				return RedirectToAction(nameof(All));
+			}
+
+			return View(currentEvent);
+		}
 	}
 }

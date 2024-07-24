@@ -121,6 +121,24 @@ public class EventService : IEventService
 			.FirstOrDefaultAsync();
 	}
 
+	public async Task<EventDetailsViewModel?> GetEventDetailsAsync(int eventId)
+	{
+		return await context.Events
+			.Where(e => e.Id == eventId)
+			.Select(e => new EventDetailsViewModel
+			{
+				Id = e.Id,
+				Name = e.Name,
+				Description = e.Description,
+				Start = e.Start.ToString(DateTimeDefaultFormat),
+				End = e.End.ToString(DateTimeDefaultFormat),
+				CreatedOn = e.CreatedOn.ToString(DateTimeDefaultFormat),
+				Organiser = e.Organiser.UserName,
+				Type = e.Type.Name
+			})
+			.FirstOrDefaultAsync();
+	}
+
 	public async Task<ICollection<EventViewModel>> GetUserEventsAsync(string userId)
 	{
 		return await context.Events
