@@ -66,4 +66,55 @@ public class GameController : BaseController
 		model.Genres = await genreService.GetAllGenresAsync();
 		return View(model);
 	}
+
+	[HttpGet]
+	public async Task<IActionResult> MyZone()
+	{
+		try
+		{
+			var userId = GetCurrentUserId();
+			var model = await gameService.GetUserGamesCollectionAsync(userId);
+			return View(model);
+
+		}
+		catch (Exception ex)
+		{
+			logger.LogError(ex, "An error occurred while loading user game collection.");
+			ModelState.AddModelError(string.Empty, "An error occurred while loading user game collection. Please try again later.");
+			return RedirectToAction(nameof(All));
+		}
+	}
+
+	public async Task<IActionResult> AddToMyZone(int id)
+	{
+		try
+		{
+			var userId = GetCurrentUserId();
+			await gameService.AddGameToUserCollectionAsync(id, userId);
+			return RedirectToAction(nameof(MyZone));
+		}
+		catch (Exception ex)
+		{
+			logger.LogError(ex, "An error occurred while adding game to user collection.");
+			ModelState.AddModelError(string.Empty, "An error occurred while adding game to user collection. Please try again later.");
+			return RedirectToAction(nameof(All));
+		}
+	}
+
+	public async Task<IActionResult> StrikeOut(int id)
+	{
+		try
+		{
+			var userId = GetCurrentUserId();
+			await gameService.RemoveGameFromUserCollectionAsync(id, userId);
+			return RedirectToAction(nameof(MyZone));
+		}
+		catch (Exception ex)
+		{
+			logger.LogError(ex, "An error occurred while removin game from user collection.");
+			ModelState.AddModelError(string.Empty, "An error occurred while removin game from user collection. Please try again later.");
+			return RedirectToAction(nameof(All));
+		}
+	}
+
 }
