@@ -1,8 +1,9 @@
-﻿using GameZone.Data;
+﻿using GameZone.Core.Models;
+using GameZone.Data.Models;
 
-namespace GameZone.Contracts;
+namespace GameZone.Core.Contracts;
 
-public class IGameService
+public interface IGameService
 {
-
+	Task AddgameAsync(AddGameViewModel game, string publisherId);
 }

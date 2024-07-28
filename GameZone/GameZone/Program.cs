@@ -1,4 +1,5 @@
-using GameZone.Contracts;
+using GameZone.Core.Contracts;
+using GameZone.Core.Services;
 using GameZone.Data;
 using GameZone.Services;
 using Microsoft.AspNetCore.Identity;
@@ -18,11 +19,18 @@ namespace GameZone
 				options.UseSqlServer(connectionString));
 			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+			{
+				options.SignIn.RequireConfirmedAccount = false;
+				options.Password.RequireDigit = false;
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireUppercase = false;
+			})
 				.AddEntityFrameworkStores<GameZoneDbContext>();
 			builder.Services.AddControllersWithViews();
 
 			builder.Services.AddScoped<IGameService, GameService>();
+			builder.Services.AddScoped<IGenreService, GenreService>();
 
 			var app = builder.Build();
 
