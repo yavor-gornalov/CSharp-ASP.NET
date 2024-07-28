@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static GameZone.Data.Validations.GlobalConstants;
+using static GameZone.Infrastructure.Validations.GlobalConstants;
 
 namespace GameZone.Data.Models;
 

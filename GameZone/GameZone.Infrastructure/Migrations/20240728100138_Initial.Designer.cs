@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GameZone.Migrations
+namespace GameZone.Infrastructure.Migrations
 {
     [DbContext(typeof(GameZoneDbContext))]
-    [Migration("20240724154708_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240728100138_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

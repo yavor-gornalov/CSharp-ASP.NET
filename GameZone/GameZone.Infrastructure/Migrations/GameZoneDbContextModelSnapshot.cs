@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GameZone.Migrations
+namespace GameZone.Infrastructure.Migrations
 {
     [DbContext(typeof(GameZoneDbContext))]
     partial class GameZoneDbContextModelSnapshot : ModelSnapshot
