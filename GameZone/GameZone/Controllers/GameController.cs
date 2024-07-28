@@ -68,6 +68,42 @@ public class GameController : BaseController
 	}
 
 	[HttpGet]
+	public async Task<IActionResult> Edit(int id)
+	{
+
+		var model = await gameService.GetGameByIdAsync(id);
+		model.Genres = await genreService.GetAllGenresAsync();
+
+		return View(model);
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Edit(EditGameViewModel model)
+	{
+
+		//if (!ModelState.IsValid)
+		//{
+		//	model.Genres = await genreService.GetAllGenresAsync();
+		//	return View(model);
+		//}
+
+		try
+		{
+			var userId = GetCurrentUserId();
+			await gameService.EditGameAsync(model, userId);
+			return RedirectToAction(nameof(All));
+		}
+		catch (Exception ex)
+		{
+			logger.LogError(ex, "An error occurred while modifying the game.");
+			ModelState.AddModelError(string.Empty, "An error occurred while modifying the game. Please try again later.");
+		}
+
+		model.Genres = await genreService.GetAllGenresAsync();
+		return View(model);
+	}
+
+	[HttpGet]
 	public async Task<IActionResult> MyZone()
 	{
 		try

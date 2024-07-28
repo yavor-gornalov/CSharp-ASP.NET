@@ -58,6 +58,31 @@ public class GameService : IGameService
 		await context.SaveChangesAsync();
 	}
 
+	public async Task EditGameAsync(EditGameViewModel model, string publisherId)
+	{
+		var game = context.Games.First(g => g.Id == model.Id) ?? throw new ArgumentException("Invalid game.");
+
+		if (game.PublisherId != publisherId)
+			throw new UnauthorizedAccessException("No privileges to modify this game.");
+
+		var isReleaseOnDateValid = DateTime.TryParseExact(
+			model.ReleasedOn,
+			DateTimeDefaultFormat,
+			CultureInfo.InvariantCulture,
+			DateTimeStyles.None,
+			out DateTime releaseOn);
+
+		if (!isReleaseOnDateValid)
+			throw new ArgumentException("Invalid date");
+
+		game.Name = model.Title;
+		game.ImageUrl = model.ImageUrl;
+		game.Description = model.Description;
+		game.ReleasedOn = releaseOn;
+
+		await context.SaveChangesAsync();
+	}
+
 	public async Task<ICollection<AllGameVIewModel>> GetAllGamesAsync()
 	{
 		return await context.Games
@@ -67,11 +92,30 @@ public class GameService : IGameService
 				Title = g.Name,
 				ImageUrl = g.ImageUrl,
 				Description = g.Description,
-				Genre = g.Genre.Name,
+				ReleasedOn = g.ReleasedOn.ToString(DateTimeDefaultFormat, CultureInfo.InvariantCulture),
 				Publisher = g.Publisher.UserName,
+				Genre = g.Genre.Name,
 			})
 			.AsNoTracking()
 			.ToListAsync();
+	}
+
+	public async Task<EditGameViewModel> GetGameByIdAsync(int gameId)
+	{
+		return await context.Games
+			.Where(g => g.Id == gameId)
+			.Select(g => new EditGameViewModel
+			{
+				Id = gameId,
+				Title = g.Name,
+				ImageUrl = g.ImageUrl,
+				Description = g.Description,
+				GenreId = g.GenreId,
+				ReleasedOn = g.ReleasedOn.ToString(DateTimeDefaultFormat, CultureInfo.InvariantCulture),
+				PublisherId = g.PublisherId,
+			})
+			.AsNoTracking()
+			.FirstAsync() ?? throw new ArgumentException("Invalid game.");
 	}
 
 	public async Task<ICollection<AllGameVIewModel>> GetUserGamesCollectionAsync(string? userId)
