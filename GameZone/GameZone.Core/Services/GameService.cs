@@ -2,6 +2,7 @@
 using GameZone.Core.Models;
 using GameZone.Data;
 using GameZone.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using static GameZone.Infrastructure.Validations.GlobalConstants;
 
@@ -40,6 +41,22 @@ public class GameService : IGameService
 
 		await context.Games.AddAsync(newGame);
 		await context.SaveChangesAsync();
+	}
+
+	public async Task<ICollection<AllGameVIewModel>> GetAllGamesAsync()
+	{
+		return await context.Games
+			.Select(g => new AllGameVIewModel
+			{
+				Id = g.Id,
+				Title = g.Name,
+				ImageUrl = g.ImageUrl,
+				Description = g.Description,
+				Genre = g.Genre.Name,
+				Publisher = g.Publisher.UserName,
+			})
+			.AsNoTracking()
+			.ToListAsync();
 	}
 }
 

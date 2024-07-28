@@ -26,7 +26,8 @@ public class GameController : BaseController
 	[AllowAnonymous]
 	public async Task<IActionResult> All()
 	{
-		return View();
+		var model = await gameService.GetAllGamesAsync();
+		return View(model);
 	}
 
 	[HttpGet]

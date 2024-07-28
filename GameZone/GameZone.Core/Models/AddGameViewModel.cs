@@ -9,8 +9,7 @@ public class AddGameViewModel
 	[StringLength(GameTitleMaxLength, MinimumLength = GameTitleMinLength)]
 	public string Title { get; set; } = null!;
 
-	[Required]
-	public string ImageUrl { get; set; } = null!;
+	public string? ImageUrl { get; set; } = null!;
 
 	[Required]
 	[StringLength(GameDescriptionMaxLength, MinimumLength = GameDescriptionMinLength)]
