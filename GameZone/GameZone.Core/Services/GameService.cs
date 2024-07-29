@@ -58,7 +58,7 @@ public class GameService : IGameService
 		await context.SaveChangesAsync();
 	}
 
-	public async Task EditGameAsync(AddGameViewModel model, int gameId, string publisherId)
+	public async Task EditGameAsync(EditGameViewModel model, int gameId, string publisherId)
 	{
 		var game = context.Games.First(g => g.Id == gameId) ?? throw new ArgumentException("Invalid game.");
 
@@ -78,6 +78,7 @@ public class GameService : IGameService
 		game.Name = model.Title;
 		game.ImageUrl = model.ImageUrl;
 		game.Description = model.Description;
+		game.PublisherId = publisherId;
 		game.ReleasedOn = releaseOn;
 
 		await context.SaveChangesAsync();
@@ -100,15 +101,16 @@ public class GameService : IGameService
 			.ToListAsync();
 	}
 
-	public async Task<AddGameViewModel> GetGameByIdAsync(int gameId)
+	public async Task<EditGameViewModel> GetGameByIdAsync(int gameId)
 	{
 		return await context.Games
 			.Where(g => g.Id == gameId)
-			.Select(g => new AddGameViewModel
+			.Select(g => new EditGameViewModel
 			{
 				Title = g.Name,
 				ImageUrl = g.ImageUrl,
 				Description = g.Description,
+				PublisherId = g.PublisherId,
 				GenreId = g.GenreId,
 				ReleasedOn = g.ReleasedOn.ToString(DateTimeDefaultFormat, CultureInfo.InvariantCulture),
 			})

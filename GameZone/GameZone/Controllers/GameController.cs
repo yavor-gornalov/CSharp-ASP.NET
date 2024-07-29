@@ -54,7 +54,7 @@ public class GameController : BaseController
 		try
 		{
 			var userId = GetCurrentUserId();
-			await gameService.AddgameAsync(model, userId);
+			await gameService.AddgameAsync(model, userId!);
 			return RedirectToAction(nameof(All));
 		}
 		catch (Exception ex)
@@ -70,34 +70,32 @@ public class GameController : BaseController
 	[HttpGet]
 	public async Task<IActionResult> Edit(int id)
 	{
-
+		var userId = GetCurrentUserId()!;
 		var model = await gameService.GetGameByIdAsync(id);
 		model.Genres = await genreService.GetAllGenresAsync();
+
+		if (model.PublisherId != userId)
+		{
+			return RedirectToAction(nameof(All));
+		}
 
 		return View(model);
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> Edit(int id, AddGameViewModel model)
+	public async Task<IActionResult> Edit(int id, EditGameViewModel model)
 	{
-
-		if (!ModelState.IsValid)
-		{
-			model.Genres = await genreService.GetAllGenresAsync();
-			return View(model);
-		}
-
+		var userId = GetCurrentUserId();
 		try
 		{
-			var userId = GetCurrentUserId();
-			await gameService.EditGameAsync(model, id, userId);
-			return RedirectToAction(nameof(All));
-		}
-		catch (UnauthorizedAccessException uae)
-		{
-			logger.LogError(uae, $"This user is not authorized to change game: {model.Title}");
-			ModelState.AddModelError(string.Empty, $"Logged user is not publisher of game: {model.Title}");
-			return RedirectToAction(nameof(All));
+			model.PublisherId = userId!;
+			model.Genres = await genreService.GetAllGenresAsync();
+
+			if (ModelState.IsValid)
+			{
+				await gameService.EditGameAsync(model, id, userId!);
+				return RedirectToAction(nameof(All));
+			}
 		}
 		catch (Exception ex)
 		{
@@ -105,6 +103,7 @@ public class GameController : BaseController
 			ModelState.AddModelError(string.Empty, "An error occurred while modifying the game. Please try again later.");
 		}
 
+		model.PublisherId = userId!;
 		model.Genres = await genreService.GetAllGenresAsync();
 		return View(model);
 	}
