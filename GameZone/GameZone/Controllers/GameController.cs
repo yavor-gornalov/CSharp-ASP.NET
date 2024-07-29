@@ -78,19 +78,25 @@ public class GameController : BaseController
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> Edit(EditGameViewModel model)
+	public async Task<IActionResult> Edit(int id, AddGameViewModel model)
 	{
 
-		//if (!ModelState.IsValid)
-		//{
-		//	model.Genres = await genreService.GetAllGenresAsync();
-		//	return View(model);
-		//}
+		if (!ModelState.IsValid)
+		{
+			model.Genres = await genreService.GetAllGenresAsync();
+			return View(model);
+		}
 
 		try
 		{
 			var userId = GetCurrentUserId();
-			await gameService.EditGameAsync(model, userId);
+			await gameService.EditGameAsync(model, id, userId);
+			return RedirectToAction(nameof(All));
+		}
+		catch (UnauthorizedAccessException uae)
+		{
+			logger.LogError(uae, $"This user is not authorized to change game: {model.Title}");
+			ModelState.AddModelError(string.Empty, $"Logged user is not publisher of game: {model.Title}");
 			return RedirectToAction(nameof(All));
 		}
 		catch (Exception ex)

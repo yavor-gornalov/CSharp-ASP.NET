@@ -58,9 +58,9 @@ public class GameService : IGameService
 		await context.SaveChangesAsync();
 	}
 
-	public async Task EditGameAsync(EditGameViewModel model, string publisherId)
+	public async Task EditGameAsync(AddGameViewModel model, int gameId, string publisherId)
 	{
-		var game = context.Games.First(g => g.Id == model.Id) ?? throw new ArgumentException("Invalid game.");
+		var game = context.Games.First(g => g.Id == gameId) ?? throw new ArgumentException("Invalid game.");
 
 		if (game.PublisherId != publisherId)
 			throw new UnauthorizedAccessException("No privileges to modify this game.");
@@ -100,19 +100,17 @@ public class GameService : IGameService
 			.ToListAsync();
 	}
 
-	public async Task<EditGameViewModel> GetGameByIdAsync(int gameId)
+	public async Task<AddGameViewModel> GetGameByIdAsync(int gameId)
 	{
 		return await context.Games
 			.Where(g => g.Id == gameId)
-			.Select(g => new EditGameViewModel
+			.Select(g => new AddGameViewModel
 			{
-				Id = gameId,
 				Title = g.Name,
 				ImageUrl = g.ImageUrl,
 				Description = g.Description,
 				GenreId = g.GenreId,
 				ReleasedOn = g.ReleasedOn.ToString(DateTimeDefaultFormat, CultureInfo.InvariantCulture),
-				PublisherId = g.PublisherId,
 			})
 			.AsNoTracking()
 			.FirstAsync() ?? throw new ArgumentException("Invalid game.");

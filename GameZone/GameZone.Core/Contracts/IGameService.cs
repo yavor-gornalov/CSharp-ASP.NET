@@ -14,7 +14,7 @@ public interface IGameService
 
 	Task RemoveGameFromUserCollectionAsync(int gameId, string? userId);
 
-	Task<EditGameViewModel> GetGameByIdAsync(int gameId);
+	Task<AddGameViewModel> GetGameByIdAsync(int gameId);
 
-	Task EditGameAsync(EditGameViewModel model, string publisherId);
+	Task EditGameAsync(AddGameViewModel model, int gameId, string publisherId);
 }
