@@ -158,4 +158,39 @@ public class GameController : BaseController
 		}
 	}
 
+	public async Task<IActionResult> Details(int id)
+	{
+		var model = await gameService.GetGameDetailsAsync(id);
+		return View(model);
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> Delete(int id)
+	{
+		var gameToDelete = await gameService.GetGameDetailsAsync(id);
+
+		var model = new DeleteGameVIewModel
+		{
+			Id = gameToDelete.Id,
+			Title = gameToDelete.Title,
+			Publisher = gameToDelete.Publisher,
+		};
+
+		return View(model);
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> DeleteConfirmed(int id, DeleteGameVIewModel model)
+	{
+		try
+		{
+			await gameService.DeleteGameById(id);
+		}
+		catch (Exception ex)
+		{
+			return View(model);
+		};
+
+		return RedirectToAction(nameof(All));
+	}
 }

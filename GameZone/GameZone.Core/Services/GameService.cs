@@ -58,6 +58,15 @@ public class GameService : IGameService
 		await context.SaveChangesAsync();
 	}
 
+	public async Task DeleteGameById(int gameId)
+	{
+		var game = context.Games
+			.First(g => g.Id == gameId) ?? throw new ArgumentException("Invalid game");
+
+		context.Games.Remove(game);
+		await context.SaveChangesAsync();
+	}
+
 	public async Task EditGameAsync(EditGameViewModel model, int gameId, string publisherId)
 	{
 		var game = context.Games.First(g => g.Id == gameId) ?? throw new ArgumentException("Invalid game.");
@@ -116,6 +125,22 @@ public class GameService : IGameService
 			})
 			.AsNoTracking()
 			.FirstAsync() ?? throw new ArgumentException("Invalid game.");
+	}
+
+	public async Task<AllGameVIewModel> GetGameDetailsAsync(int gameId)
+	{
+		return await context.Games
+			.Select(g => new AllGameVIewModel
+			{
+				Id = g.Id,
+				Title = g.Name,
+				ImageUrl = g.ImageUrl,
+				Description = g.Description,
+				ReleasedOn = g.ReleasedOn.ToString(DateTimeDefaultFormat, CultureInfo.InvariantCulture),
+				Publisher = g.Publisher.UserName,
+				Genre = g.Genre.Name,
+			})
+			.FirstAsync(g => g.Id == gameId) ?? throw new ArgumentException("Invalid game.");
 	}
 
 	public async Task<ICollection<AllGameVIewModel>> GetUserGamesCollectionAsync(string? userId)

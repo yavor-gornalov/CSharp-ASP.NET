@@ -17,4 +17,7 @@ public interface IGameService
 	Task<EditGameViewModel> GetGameByIdAsync(int gameId);
 
 	Task EditGameAsync(EditGameViewModel model, int gameId, string publisherId);
+
+	Task<AllGameVIewModel> GetGameDetailsAsync(int gameId);
+	Task DeleteGameById(int gameId);
 }
