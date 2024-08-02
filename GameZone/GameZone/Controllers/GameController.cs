@@ -1,8 +1,5 @@
 ﻿using GameZone.Core.Contracts;
 using GameZone.Core.Models;
-using GameZone.Core.Services;
-using GameZone.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameZone.Controllers;
@@ -23,7 +20,6 @@ public class GameController : BaseController
 		logger = _logger;
 	}
 
-	[AllowAnonymous]
 	public async Task<IActionResult> All()
 	{
 		var model = await gameService.GetAllGamesAsync();
