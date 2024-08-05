@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SeminarHub.Data;
+using SeminarHub.Services;
+using SeminarHub.Services.Contracts;
 
 namespace SeminarHub
 {
@@ -24,6 +26,8 @@ namespace SeminarHub
 				options.Password.RequireUppercase = false;
 			})
 				.AddEntityFrameworkStores<SeminarHubDbContext>();
+
+			builder.Services.AddScoped<ISeminarService, SeminarService>();
 			builder.Services.AddControllersWithViews();
 
 			var app = builder.Build();
