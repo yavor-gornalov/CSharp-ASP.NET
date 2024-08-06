@@ -16,7 +16,7 @@ public interface ISeminarService
 
 	Task JoinSeminarAsync(int seminarId, string userId);
 
-	Task<Seminar> GetSeminarByIdAsync(int id);
+	Task<SeminarDetailsViewModel> GetSeminarDetailsByIdAsync(int id);
 
 	Task LeaveSeminarAsync(int seminarId, string userId);
 }

@@ -59,10 +59,21 @@ public class SeminarService : ISeminarService
 			.ToListAsync();
 	}
 
-	public async Task<Seminar> GetSeminarByIdAsync(int seminarId)
+	public async Task<SeminarDetailsViewModel> GetSeminarDetailsByIdAsync(int seminarId)
 	{
 		return await context.Seminars
-			.FirstAsync(s => s.Id == seminarId);
+			.Select(s => new SeminarDetailsViewModel
+			{
+				Id = s.Id,
+				Topic = s.Topic,
+				Details = s.Details,
+				Lecturer = s.Lecturer,
+				Organizer = s.Organizer.UserName,
+				Category = s.Category.Name,
+				DateAndTime = s.DateAndTime.ToString(DateTimeDefaultFormat, CultureInfo.InvariantCulture),
+				Duration = s.Duration
+			})
+			.FirstAsync(s => s.Id == seminarId) ?? throw new ArgumentException("Invalid seminar");
 	}
 
 	public async Task<ICollection<SeminarCategoryViewModel>> GetSeminarCategoriesAsync()

@@ -109,4 +109,18 @@ public class SeminarController : BaseController
 
 		return RedirectToAction(nameof(Joined));
 	}
+
+	public async Task<IActionResult> Details(int id)
+	{
+		var userId = GetUserId();
+		if (userId == null)
+			return Unauthorized();
+
+		var seminar = await seminarService.GetSeminarDetailsByIdAsync(id);
+
+		if (seminar == null)
+			return NotFound();
+
+		return View(seminar);
+	}
 }
