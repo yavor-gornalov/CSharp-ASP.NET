@@ -38,9 +38,7 @@ public class SeminarController : BaseController
 		var organizerId = GetUserId();
 
 		if (organizerId == null)
-		{
 			return Unauthorized();
-		}
 
 		if (!ModelState.IsValid)
 		{
@@ -49,6 +47,56 @@ public class SeminarController : BaseController
 		}
 
 		await seminarService.AddSeminarAsync(model, organizerId);
+		return RedirectToAction(nameof(All));
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> Edit(int id)
+	{
+		var userId = GetUserId();
+		if (userId == null)
+			return Unauthorized();
+
+		var seminar = await seminarService.GetSeminarForEditAsync(id);
+
+		if (seminar == null)
+			return NotFound();
+
+		if (seminar.OrganizerId != userId)
+			return BadRequest();
+
+		seminar.Categories = await seminarService.GetSeminarCategoriesAsync();
+		return View(seminar);
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Edit(int id, SeminarEditViewModel model)
+	{
+		var userId = GetUserId();
+		if (userId == null)
+			return Unauthorized();
+
+		if (!ModelState.IsValid)
+		{
+			model.Categories = await seminarService.GetSeminarCategoriesAsync();
+			return View(model);
+		}
+
+		try
+		{
+			await seminarService.EditSeminarAsync(id, userId, model);
+		}
+		catch (ArgumentException ae)
+		{
+			ModelState.AddModelError("DateAndTime", ae.Message);
+			model.Categories = await seminarService.GetSeminarCategoriesAsync();
+			return View(model);
+		}
+		catch (UnauthorizedAccessException)
+		{
+			return BadRequest();
+		}
+
 		return RedirectToAction(nameof(All));
 	}
 

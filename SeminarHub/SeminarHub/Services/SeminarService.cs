@@ -37,6 +37,7 @@ public class SeminarService : ISeminarService
 			DateAndTime = dateAndTime,
 			CategoryId = model.CategoryId,
 			OrganizerId = organizerId,
+			Duration = model.Duration,
 		};
 
 		await context.Seminars.AddAsync(seminar);
@@ -134,6 +135,55 @@ public class SeminarService : ISeminarService
 			.First(sp => sp.ParticipantId == userId) ?? throw new ArgumentException("Invalid participant");
 
 		seminar.SeminarsParticipants.Remove(participant);
+		await context.SaveChangesAsync();
+	}
+
+	public async Task<SeminarEditViewModel?> GetSeminarForEditAsync(int seminarId)
+	{
+		return await context.Seminars
+			.Where(s => s.Id == seminarId)
+			.Select(s => new SeminarEditViewModel
+			{
+				Id = s.Id,
+				Topic = s.Topic,
+				Lecturer = s.Lecturer,
+				Details = s.Details,
+				DateAndTime = s.DateAndTime.ToString(DateTimeDefaultFormat, CultureInfo.InvariantCulture),
+				OrganizerId = s.OrganizerId,
+				Duration = s.Duration,
+				CategoryId = s.CategoryId
+			})
+			.FirstOrDefaultAsync();
+	}
+
+	public async Task EditSeminarAsync(int seminarId, string userId, SeminarEditViewModel model)
+	{
+		bool isDateValid = DateTime.TryParseExact(
+			model.DateAndTime,
+			DateTimeDefaultFormat,
+			CultureInfo.InvariantCulture,
+			DateTimeStyles.None,
+			out DateTime dateAndTime);
+
+		if (!isDateValid)
+			throw new ArgumentException("Invalid date");
+
+		var seminar = await context.Seminars
+			.FirstOrDefaultAsync(s => s.Id == seminarId);
+
+		if (seminar == null)
+			throw new ArgumentException("Invalid seminar");
+
+		if (seminar.OrganizerId != userId)
+			throw new UnauthorizedAccessException("No permission to modify this record");
+
+		seminar.Topic = model.Topic;
+		seminar.Lecturer = model.Lecturer;
+		seminar.Details = model.Details;
+		seminar.DateAndTime = dateAndTime;
+		seminar.Duration = model.Duration;
+		seminar.CategoryId = model.CategoryId;
+
 		await context.SaveChangesAsync();
 	}
 }
