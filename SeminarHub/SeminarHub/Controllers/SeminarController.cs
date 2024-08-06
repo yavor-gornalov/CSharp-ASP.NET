@@ -51,4 +51,62 @@ public class SeminarController : BaseController
 		await seminarService.AddSeminarAsync(model, organizerId);
 		return RedirectToAction(nameof(All));
 	}
+
+	public async Task<IActionResult> Join(int id)
+	{
+		var userId = GetUserId();
+
+		if (userId == null)
+		{
+			return Unauthorized();
+		}
+
+		try
+		{
+			await seminarService.JoinSeminarAsync(id, userId);
+
+		}
+		catch (ArgumentException)
+		{
+			return RedirectToAction(nameof(All));
+		}
+
+		return RedirectToAction(nameof(Joined));
+
+
+
+	}
+
+	public async Task<IActionResult> Joined()
+	{
+		var userId = GetUserId();
+
+		if (userId == null)
+		{
+			return Unauthorized();
+		}
+
+		var seminars = await seminarService.GetUserSeminarsAsync(userId);
+		return View(seminars);
+	}
+
+	public async Task<IActionResult> Leave(int id)
+	{
+		var userId = GetUserId();
+
+		if (userId == null)
+			return Unauthorized();
+
+		try
+		{
+			await seminarService.LeaveSeminarAsync(id, userId);
+
+		}
+		catch (ArgumentException)
+		{
+			return BadRequest();
+		}
+
+		return RedirectToAction(nameof(Joined));
+	}
 }

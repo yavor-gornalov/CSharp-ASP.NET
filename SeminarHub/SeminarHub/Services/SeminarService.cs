@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using SeminarHub.Data;
 using SeminarHub.Data.Models;
 using SeminarHub.Models;
@@ -58,6 +59,12 @@ public class SeminarService : ISeminarService
 			.ToListAsync();
 	}
 
+	public async Task<Seminar> GetSeminarByIdAsync(int seminarId)
+	{
+		return await context.Seminars
+			.FirstAsync(s => s.Id == seminarId);
+	}
+
 	public async Task<ICollection<SeminarCategoryViewModel>> GetSeminarCategoriesAsync()
 	{
 		return await context.Categories
@@ -68,5 +75,54 @@ public class SeminarService : ISeminarService
 			})
 			.AsNoTracking()
 			.ToListAsync();
+	}
+
+	public async Task<ICollection<SeminarAllViewModel>> GetUserSeminarsAsync(string userId)
+	{
+		return await context.Seminars
+			.Where(s => s.SeminarsParticipants.Any(p => p.ParticipantId == userId))
+			.Select(s => new SeminarAllViewModel
+			{
+				Id = s.Id,
+				Topic = s.Topic,
+				Lecturer = s.Lecturer,
+				Organizer = s.Organizer.UserName,
+				DateAndTime = s.DateAndTime.ToString(DateTimeDefaultFormat, CultureInfo.InvariantCulture),
+				Category = s.Category.Name
+			})
+			.AsNoTracking()
+			.ToListAsync();
+	}
+
+	public async Task JoinSeminarAsync(int seminarId, string userId)
+	{
+		var seminar = await context.Seminars
+			.Include(s => s.SeminarsParticipants)
+			.FirstAsync(s => s.Id == seminarId) ?? throw new ArgumentException("Seminar does not exist");
+
+		if (seminar.SeminarsParticipants.Any(p => p.ParticipantId == userId))
+			throw new ArgumentException("Already joined to this seminar");
+
+		var participant = new SeminarParticipant
+		{
+			ParticipantId = userId,
+			Seminar = seminar
+		};
+		seminar.SeminarsParticipants.Add(participant);
+
+		await context.SaveChangesAsync();
+	}
+
+	public async Task LeaveSeminarAsync(int seminarId, string userId)
+	{
+		var seminar = await context.Seminars
+			.Include(s => s.SeminarsParticipants)
+			.FirstAsync(s => s.Id == seminarId) ?? throw new ArgumentException("Invalid seminar");
+
+		var participant = seminar.SeminarsParticipants
+			.First(sp => sp.ParticipantId == userId) ?? throw new ArgumentException("Invalid participant");
+
+		seminar.SeminarsParticipants.Remove(participant);
+		await context.SaveChangesAsync();
 	}
 }
