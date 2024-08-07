@@ -36,5 +36,5 @@ public class House
 	public int AgentId { get; set; }
 	public Agent Agent { get; set; } = null!;
 
-	public string RenterId { get; set; } = null!;
+	public string? RenterId { get; set; }
 }
