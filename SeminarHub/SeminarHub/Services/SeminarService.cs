@@ -186,4 +186,27 @@ public class SeminarService : ISeminarService
 
 		await context.SaveChangesAsync();
 	}
+
+	public async Task DeleteSeminarAsync(int seminarId, string userId)
+	{
+		Seminar seminarToDelete = await context.Seminars
+			.FirstAsync(s => s.Id == seminarId) ?? throw new ArgumentException("Invalid seminar");
+
+		if (seminarToDelete.OrganizerId != userId)
+			throw new UnauthorizedAccessException("No permission to modify this record");
+
+		foreach (var participant in seminarToDelete.SeminarsParticipants)
+		{
+			//participant
+		}
+
+		var participantsToRemove = context.SeminarsParticipants
+			.Where(s => s.SeminarId == seminarId)
+			.ToList();
+
+		context.SeminarsParticipants.RemoveRange(participantsToRemove);
+		context.Seminars.Remove(seminarToDelete);
+
+		await context.SaveChangesAsync();
+	}
 }

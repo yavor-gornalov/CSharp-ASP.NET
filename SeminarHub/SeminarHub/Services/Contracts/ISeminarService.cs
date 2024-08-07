@@ -22,5 +22,7 @@ public interface ISeminarService
 
 	Task<SeminarEditViewModel?> GetSeminarForEditAsync(int id);
 
+	Task DeleteSeminarAsync(int seminarId, string userId);
+
 	Task EditSeminarAsync(int seminarId, string userId, SeminarEditViewModel model);
 }

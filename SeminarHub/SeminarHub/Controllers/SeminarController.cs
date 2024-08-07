@@ -2,6 +2,8 @@
 using SeminarHub.Models;
 using SeminarHub.Services;
 using SeminarHub.Services.Contracts;
+using System.Globalization;
+using static SeminarHub.Data.Common.ValidationConstants;
 
 namespace SeminarHub.Controllers;
 
@@ -98,6 +100,64 @@ public class SeminarController : BaseController
 		}
 
 		return RedirectToAction(nameof(All));
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> Delete(int id)
+	{
+		var userId = GetUserId();
+
+		if (userId == null)
+		{
+			return Unauthorized();
+		}
+
+		var seminarToDelete = await seminarService.GetSeminarForEditAsync(id);
+
+		if (seminarToDelete == null)
+		{
+			return NotFound();
+		}
+
+		if (seminarToDelete.OrganizerId != userId)
+		{
+			return BadRequest();
+		}
+
+		var model = new SeminarDeleteViewModel
+		{
+			Id = seminarToDelete.Id,
+			Topic = seminarToDelete.Topic,
+			DateAndTime = DateTime.ParseExact(seminarToDelete.DateAndTime, DateTimeDefaultFormat, CultureInfo.InvariantCulture)
+		};
+
+		return View(model);
+
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> DeleteConfirmed(int id, SeminarDeleteViewModel model)
+	{
+		var userId = GetUserId();
+		if (userId == null)
+			return Unauthorized();
+
+		try
+		{
+			await seminarService.DeleteSeminarAsync(id, userId);
+		}
+		catch (ArgumentException ae)
+		{
+			return NotFound();
+		}
+		catch (UnauthorizedAccessException)
+		{
+			return BadRequest();
+		}
+
+		return RedirectToAction(nameof(All));
+
+
 	}
 
 	public async Task<IActionResult> Join(int id)
