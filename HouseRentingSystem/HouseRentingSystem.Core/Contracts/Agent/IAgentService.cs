@@ -9,4 +9,6 @@ public interface IAgentService
 	Task<bool> UserHasRents(string userId);
 
 	Task CreateAsync(string userId, string phoneNumber);
+
+	Task<int> GetAgentIdAsync(string userId);
 }

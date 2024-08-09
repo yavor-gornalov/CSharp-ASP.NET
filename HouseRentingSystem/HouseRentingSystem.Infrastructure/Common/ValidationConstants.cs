@@ -13,7 +13,7 @@ public static class ValidationConstants
 	public const int HouseDescriptionMinLength = 50;
 	public const int HouseDescriptionMaxLength = 500;
 	public const string HousePricePerMonthMinValue = "0.0";
-	public const string HousePricePerMonthMaxValue = "2000.0";
+	public const string HousePricePerMonthMaxValue = "20000.0";
 
 	// Agent
 	public const int AgentPhoneNumberMinLength = 7;

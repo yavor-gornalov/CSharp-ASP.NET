@@ -1,12 +1,11 @@
 ﻿using HouseRentingSystem.Core.Contracts.House;
-using HouseRentingSystem.Core.Services.House;
 using HouseRentingSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace HouseRentingSystem.Controllers
 {
-	public class HomeController : Controller
+    public class HomeController : Controller
 	{
 		private readonly IHouseService _houseService;
 

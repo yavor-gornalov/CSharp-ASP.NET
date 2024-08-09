@@ -31,6 +31,14 @@ public class AgentService : IAgentService
 			.AnyAsync(a => a.UserId == userId);
 	}
 
+	public async Task<int> GetAgentIdAsync(string userId)
+	{
+		var agent = await _context.Agents
+			.FirstOrDefaultAsync(a => a.UserId == userId);
+
+		return agent!.Id;
+	}
+
 	public async Task<bool> UserHasRents(string userId)
 	{
 		return await _context.Houses
