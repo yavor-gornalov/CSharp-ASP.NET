@@ -18,7 +18,14 @@ public class AgentController : Controller
 
 	public async Task<IActionResult> Become()
 	{
-		return View();
+        var userId = User.Id();
+
+        if (await _agentService.ExistByIdAsync(userId))
+        {
+            return BadRequest();
+        }
+
+        return View();
 	}
 
 	[HttpPost]
