@@ -1,8 +1,10 @@
 ﻿using HouseRentingSystem.Core.Contracts.House;
 using HouseRentingSystem.Core.Enums;
+using HouseRentingSystem.Core.Models.Agent;
 using HouseRentingSystem.Core.Models.House;
 using HouseRentingSystem.Data;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace HouseRentingSystem.Core.Services.House;
 
@@ -119,6 +121,35 @@ public class HouseService : IHouseService
         await _context.SaveChangesAsync();
 
         return house.Id;
+    }
+
+    public async Task<bool> ExistAsync(int id)
+    {
+        return await _context.Houses
+            .AnyAsync(c => c.Id == id);
+    }
+
+    public async Task<HouseDetailsServiceModel> HouseDetailsByIdAsync(int id)
+    {
+        return await _context.Houses
+            .Where(h => h.Id == id)
+            .Select(h => new HouseDetailsServiceModel
+            {
+                Id = h.Id,
+                Title = h.Title,
+                Address = h.Address,
+                Description = h.Description,
+                ImageUrl = h.ImageUrl,
+                PricePerMonth = h.PricePerMonth,
+                IsRented = h.RenterId != null,
+                Category = h.Category.Name,
+                Agent = new AgentServiceModel
+                {
+                    PhoneNumber = h.Agent.PhoneNumber,
+                    Email = h.Agent.User.Email,
+                }
+            })
+            .FirstAsync();
     }
 
     public async Task<ICollection<HouseIndexServiceModel>> LastThreeHousesAsync()

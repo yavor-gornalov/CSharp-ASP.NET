@@ -5,20 +5,24 @@ namespace HouseRentingSystem.Core.Contracts.House;
 
 public interface IHouseService
 {
-	Task<ICollection<HouseIndexServiceModel>> LastThreeHousesAsync();
+    Task<ICollection<HouseIndexServiceModel>> LastThreeHousesAsync();
 
-	Task<ICollection<HouseCategoryServiceModel>> AllCategoriesAsync();
+    Task<ICollection<HouseCategoryServiceModel>> AllCategoriesAsync();
 
-	Task<IEnumerable<string>> AllCategoriesNamesAsync();
+    Task<IEnumerable<string>> AllCategoriesNamesAsync();
 
-	Task<bool> CategoryExistsAsync(int categoryId);
+    Task<bool> CategoryExistsAsync(int categoryId);
 
-	Task<int> Create(HouseFormModel model, int agentId);
+    Task<int> Create(HouseFormModel model, int agentId);
 
-	Task<HouseQueryServiceModel> AllAsync(
-		string? category = null,
-		string? searchTerm = null,
-		HouseSorting sorting = HouseSorting.Newest,
-		int currentPage = 1,
-		int housePerPage = 1);
+    Task<HouseQueryServiceModel> AllAsync(
+        string? category = null,
+        string? searchTerm = null,
+        HouseSorting sorting = HouseSorting.Newest,
+        int currentPage = 1,
+        int housePerPage = 1);
+
+    Task<bool> ExistAsync(int id);
+
+    Task<HouseDetailsServiceModel> HouseDetailsByIdAsync(int id);
 }
