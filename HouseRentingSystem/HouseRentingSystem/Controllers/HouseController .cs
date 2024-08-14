@@ -3,6 +3,7 @@ using HouseRentingSystem.Core.Contracts.House;
 using HouseRentingSystem.Core.Models.House;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Security.Claims;
 
 namespace HouseRentingSystem.Controllers;
@@ -117,13 +118,61 @@ public class HouseController : Controller
 	[HttpGet]
 	public async Task<IActionResult> Edit(int id)
 	{
-		return View(new HouseFormModel());
+		if (await _houseService.ExistAsync(id) == false)
+		{
+			return BadRequest();
+		}
+
+		if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false)
+		{
+			return Unauthorized();
+		}
+
+		var house = await _houseService.HouseDetailsByIdAsync(id);
+
+		var houseCategoryId = await _houseService.GetHouseCategoryAsync(house.Id);
+
+		var houseModel = new HouseFormModel
+		{
+			Title = house.Title,
+			Address = house.Address,
+			Description = house.Description,
+			ImageUrl = house.ImageUrl,
+			PricePerMonth = house.PricePerMonth,
+			CategoryId = houseCategoryId,
+			Categories = await _houseService.AllCategoriesAsync(),
+		};
+
+		return View(houseModel);
 	}
 
 	[HttpPost]
 	public async Task<IActionResult> Edit(int id, HouseFormModel house)
 	{
-		return RedirectToAction(nameof(Details), new { id = "1" });
+		if (await _houseService.ExistAsync(id) == false)
+		{
+			return BadRequest();
+		}
+
+		if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false)
+		{
+			return Unauthorized();
+		}
+
+		if (await _houseService.CategoryExistsAsync(house.CategoryId) == false)
+		{
+			ModelState.AddModelError(nameof(house.CategoryId), "Category does not exists");
+		}
+
+		if (!ModelState.IsValid)
+		{
+			house.Categories = await _houseService.AllCategoriesAsync();
+			return View(house);
+		}
+
+		await _houseService.EditAsync(id, house);
+
+		return RedirectToAction(nameof(Details), new { id });
 	}
 
 	[HttpGet]

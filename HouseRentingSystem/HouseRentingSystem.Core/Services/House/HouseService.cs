@@ -4,8 +4,6 @@ using HouseRentingSystem.Core.Models.Agent;
 using HouseRentingSystem.Core.Models.House;
 using HouseRentingSystem.Data;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
 
 namespace HouseRentingSystem.Core.Services.House;
 
@@ -189,5 +187,48 @@ public class HouseService : IHouseService
 			PricePerMonth = house.PricePerMonth,
 			IsRented = house.RenterId != null,
 		};
+	}
+
+	public async Task EditAsync(int houseId, HouseFormModel model)
+	{
+		var house = await _context.Houses.FindAsync(houseId);
+
+		if (house != null)
+		{
+			house.Title = model.Title;
+			house.Address = model.Address;
+			house.ImageUrl = model.ImageUrl;
+			house.PricePerMonth = model.PricePerMonth;
+			house.CategoryId = model.CategoryId;
+
+			await _context.SaveChangesAsync();
+		}
+	}
+
+	public async Task<bool> HasAgentWithIdAsync(int houseId, string userId)
+	{
+		var house = await _context.Houses.FindAsync(houseId);
+
+		if (house == null)
+		{
+			return false;
+
+		}
+
+		var agent = await _context.Agents.FirstOrDefaultAsync(a => a.Id == house.AgentId);
+
+		if (agent == null)
+		{
+			return false;
+		}
+
+		return agent.UserId == userId;
+	}
+
+	public async Task<int> GetHouseCategoryAsync(int houseId)
+	{
+		var house = await _context.Houses.FindAsync(houseId);
+
+		return house!.CategoryId;
 	}
 }
