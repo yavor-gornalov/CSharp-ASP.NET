@@ -40,7 +40,21 @@ public class HouseController : Controller
 
     public async Task<IActionResult> Mine()
     {
-        return View(new AllHousesQueryModel());
+        IEnumerable<HouseServiceModel>? myHouses = null;
+
+        var userId = User.Id();
+
+        if (await _agentService.ExistByIdAsync(userId))
+        {
+            var currentAgentId = await _agentService.GetAgentIdAsync(userId);
+            myHouses = await _houseService.AllHousesByAgentIdAsync(currentAgentId);
+        }
+        else
+        {
+            myHouses = await _houseService.AllHousesByUserIdAsync(userId);
+        }
+
+        return View(myHouses);
     }
 
     public async Task<IActionResult> Details(int id)

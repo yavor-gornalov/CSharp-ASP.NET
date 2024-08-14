@@ -5,6 +5,10 @@ namespace HouseRentingSystem.Core.Contracts.House;
 
 public interface IHouseService
 {
+    Task<ICollection<HouseServiceModel>> AllHousesByAgentIdAsync(int agentId);
+
+    Task<ICollection<HouseServiceModel>> AllHousesByUserIdAsync(string userId);
+
     Task<ICollection<HouseIndexServiceModel>> LastThreeHousesAsync();
 
     Task<ICollection<HouseCategoryServiceModel>> AllCategoriesAsync();

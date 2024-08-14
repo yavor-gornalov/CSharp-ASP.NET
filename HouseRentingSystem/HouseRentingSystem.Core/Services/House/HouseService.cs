@@ -5,165 +5,189 @@ using HouseRentingSystem.Core.Models.House;
 using HouseRentingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace HouseRentingSystem.Core.Services.House;
 
 public class HouseService : IHouseService
 {
-    private readonly ApplicationDbContext _context;
+	private readonly ApplicationDbContext _context;
 
-    public HouseService(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+	public HouseService(ApplicationDbContext context)
+	{
+		_context = context;
+	}
 
-    public async Task<HouseQueryServiceModel> AllAsync(
-        string? category = null,
-        string? searchTerm = null,
-        HouseSorting sorting = HouseSorting.Newest,
-        int currentPage = 1,
-        int housesPerPage = 1)
-    {
-        var housesQuery = _context.Houses
-            .AsQueryable()
-            .AsNoTracking();
+	public async Task<HouseQueryServiceModel> AllAsync(
+		string? category = null,
+		string? searchTerm = null,
+		HouseSorting sorting = HouseSorting.Newest,
+		int currentPage = 1,
+		int housesPerPage = 1)
+	{
+		var housesQuery = _context.Houses
+			.AsQueryable()
+			.AsNoTracking();
 
-        if (!string.IsNullOrEmpty(category))
-        {
-            housesQuery = housesQuery
-                .Where(h => h.Category.Name == category);
-        }
+		if (!string.IsNullOrEmpty(category))
+		{
+			housesQuery = housesQuery
+				.Where(h => h.Category.Name == category);
+		}
 
-        if (!string.IsNullOrEmpty(searchTerm))
-        {
-            housesQuery = housesQuery
-                .Where(h =>
-                    h.Title.ToLower().Contains(searchTerm.ToLower()) ||
-                    h.Address.ToLower().Contains(searchTerm.ToLower()) ||
-                    h.Description.ToLower().Contains(searchTerm.ToLower()));
-        }
+		if (!string.IsNullOrEmpty(searchTerm))
+		{
+			housesQuery = housesQuery
+				.Where(h =>
+					h.Title.ToLower().Contains(searchTerm.ToLower()) ||
+					h.Address.ToLower().Contains(searchTerm.ToLower()) ||
+					h.Description.ToLower().Contains(searchTerm.ToLower()));
+		}
 
-        housesQuery = sorting switch
-        {
-            HouseSorting.Price => housesQuery
-                .OrderBy(h => h.PricePerMonth),
+		housesQuery = sorting switch
+		{
+			HouseSorting.Price => housesQuery
+				.OrderBy(h => h.PricePerMonth),
 
-            HouseSorting.NotRentedFirst => housesQuery
-                .OrderBy(h => h.RenterId != null)
-                .ThenByDescending(h => h.Id),
+			HouseSorting.NotRentedFirst => housesQuery
+				.OrderBy(h => h.RenterId != null)
+				.ThenByDescending(h => h.Id),
 
-            _ => housesQuery
-                .OrderByDescending(h => h.Id)
-        };
+			_ => housesQuery
+				.OrderByDescending(h => h.Id)
+		};
 
-        var houses = await housesQuery
-            .Skip((currentPage - 1) * housesPerPage)
-            .Take(housesPerPage)
-            .Select(h => new HouseServiceModel
-            {
-                Id = h.Id,
-                Title = h.Title,
-                Address = h.Address,
-                ImageUrl = h.ImageUrl,
-                IsRented = h.RenterId != null,
-                PricePerMonth = h.PricePerMonth,
-            })
-            .ToListAsync();
+		var houses = await housesQuery
+			.Skip((currentPage - 1) * housesPerPage)
+			.Take(housesPerPage)
+			.Select(h => ProjectToServiceModel(h))
+			.ToListAsync();
 
-        var totalHouses = housesQuery.Count();
+		var totalHouses = housesQuery.Count();
 
-        return new HouseQueryServiceModel
-        {
-            Houses = houses,
-            TotalHousesCount = totalHouses
-        };
-    }
+		return new HouseQueryServiceModel
+		{
+			Houses = houses,
+			TotalHousesCount = totalHouses
+		};
+	}
 
-    public async Task<ICollection<HouseCategoryServiceModel>> AllCategoriesAsync()
-    {
-        return await _context.Categories
-            .Select(c => new HouseCategoryServiceModel
-            {
-                Id = c.Id,
-                Name = c.Name,
-            })
-            .AsNoTracking()
-            .ToListAsync();
-    }
+	public async Task<ICollection<HouseCategoryServiceModel>> AllCategoriesAsync()
+	{
+		return await _context.Categories
+			.Select(c => new HouseCategoryServiceModel
+			{
+				Id = c.Id,
+				Name = c.Name,
+			})
+			.AsNoTracking()
+			.ToListAsync();
+	}
 
-    public async Task<IEnumerable<string>> AllCategoriesNamesAsync()
-    {
-        return await _context.Categories
-            .Select(c => c.Name)
-            .Distinct()
-            .ToListAsync();
-    }
+	public async Task<IEnumerable<string>> AllCategoriesNamesAsync()
+	{
+		return await _context.Categories
+			.Select(c => c.Name)
+			.Distinct()
+			.ToListAsync();
+	}
 
-    public async Task<bool> CategoryExistsAsync(int categoryId)
-    {
-        return await _context.Categories.AnyAsync(c => c.Id == categoryId);
-    }
+	public async Task<ICollection<HouseServiceModel>> AllHousesByAgentIdAsync(int agentId)
+	{
+		return await _context.Houses
+			.Where(h => h.AgentId == agentId)
+			.Select(h => ProjectToServiceModel(h))
+			.AsNoTracking()
+			.ToListAsync();
+	}
 
-    public async Task<int> Create(HouseFormModel model, int agentId)
-    {
-        var house = new Infrastructure.Data.Models.House
-        {
-            Title = model.Title,
-            Address = model.Address,
-            Description = model.Description,
-            ImageUrl = model.ImageUrl,
-            PricePerMonth = model.PricePerMonth,
-            CategoryId = model.CategoryId,
-            AgentId = agentId,
-        };
+	public async Task<ICollection<HouseServiceModel>> AllHousesByUserIdAsync(string userId)
+	{
+		return await _context.Houses
+			.Where(h => h.RenterId == userId)
+			.Select(h => ProjectToServiceModel(h))
+			.AsNoTracking()
+			.ToListAsync();
+	}
 
-        await _context.Houses.AddAsync(house);
-        await _context.SaveChangesAsync();
+	public async Task<bool> CategoryExistsAsync(int categoryId)
+	{
+		return await _context.Categories.AnyAsync(c => c.Id == categoryId);
+	}
 
-        return house.Id;
-    }
+	public async Task<int> Create(HouseFormModel model, int agentId)
+	{
+		var house = new Infrastructure.Data.Models.House
+		{
+			Title = model.Title,
+			Address = model.Address,
+			Description = model.Description,
+			ImageUrl = model.ImageUrl,
+			PricePerMonth = model.PricePerMonth,
+			CategoryId = model.CategoryId,
+			AgentId = agentId,
+		};
 
-    public async Task<bool> ExistAsync(int id)
-    {
-        return await _context.Houses
-            .AnyAsync(c => c.Id == id);
-    }
+		await _context.Houses.AddAsync(house);
+		await _context.SaveChangesAsync();
 
-    public async Task<HouseDetailsServiceModel> HouseDetailsByIdAsync(int id)
-    {
-        return await _context.Houses
-            .Where(h => h.Id == id)
-            .Select(h => new HouseDetailsServiceModel
-            {
-                Id = h.Id,
-                Title = h.Title,
-                Address = h.Address,
-                Description = h.Description,
-                ImageUrl = h.ImageUrl,
-                PricePerMonth = h.PricePerMonth,
-                IsRented = h.RenterId != null,
-                Category = h.Category.Name,
-                Agent = new AgentServiceModel
-                {
-                    PhoneNumber = h.Agent.PhoneNumber,
-                    Email = h.Agent.User.Email,
-                }
-            })
-            .FirstAsync();
-    }
+		return house.Id;
+	}
 
-    public async Task<ICollection<HouseIndexServiceModel>> LastThreeHousesAsync()
-    {
-        return await _context.Houses
-            .OrderByDescending(h => h.Id)
-            .Select(h => new HouseIndexServiceModel
-            {
-                Id = h.Id,
-                Title = h.Title,
-                ImageUrl = h.ImageUrl,
-            })
-            .Take(3)
-            .AsNoTracking()
-            .ToListAsync();
-    }
+	public async Task<bool> ExistAsync(int id)
+	{
+		return await _context.Houses
+			.AnyAsync(c => c.Id == id);
+	}
+
+	public async Task<HouseDetailsServiceModel> HouseDetailsByIdAsync(int id)
+	{
+		return await _context.Houses
+			.Where(h => h.Id == id)
+			.Select(h => new HouseDetailsServiceModel
+			{
+				Id = h.Id,
+				Title = h.Title,
+				Address = h.Address,
+				Description = h.Description,
+				ImageUrl = h.ImageUrl,
+				PricePerMonth = h.PricePerMonth,
+				IsRented = h.RenterId != null,
+				Category = h.Category.Name,
+				Agent = new AgentServiceModel
+				{
+					PhoneNumber = h.Agent.PhoneNumber,
+					Email = h.Agent.User.Email,
+				}
+			})
+			.FirstAsync();
+	}
+
+	public async Task<ICollection<HouseIndexServiceModel>> LastThreeHousesAsync()
+	{
+		return await _context.Houses
+			.OrderByDescending(h => h.Id)
+			.Select(h => new HouseIndexServiceModel
+			{
+				Id = h.Id,
+				Title = h.Title,
+				ImageUrl = h.ImageUrl,
+			})
+			.Take(3)
+			.AsNoTracking()
+			.ToListAsync();
+	}
+
+	private static HouseServiceModel ProjectToServiceModel(Infrastructure.Data.Models.House house)
+	{
+		return new HouseServiceModel
+		{
+			Id = house.Id,
+			Title = house.Title,
+			Address = house.Address,
+			ImageUrl = house.ImageUrl,
+			PricePerMonth = house.PricePerMonth,
+			IsRented = house.RenterId != null,
+		};
+	}
 }
