@@ -113,7 +113,7 @@ public class HouseService : IHouseService
 		return await _context.Categories.AnyAsync(c => c.Id == categoryId);
 	}
 
-	public async Task<int> Create(HouseFormModel model, int agentId)
+	public async Task<int> CreateAsync(HouseFormModel model, int agentId)
 	{
 		var house = new Infrastructure.Data.Models.House
 		{
@@ -230,5 +230,16 @@ public class HouseService : IHouseService
 		var house = await _context.Houses.FindAsync(houseId);
 
 		return house!.CategoryId;
+	}
+
+	public async Task DeleteAsync(int id)
+	{
+		var house = await _context.Houses.FindAsync(id);
+
+		if (house != null)
+		{
+			_context.Houses.Remove(house);
+			await _context.SaveChangesAsync();
+		}
 	}
 }

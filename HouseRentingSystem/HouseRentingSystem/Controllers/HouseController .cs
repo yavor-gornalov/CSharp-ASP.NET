@@ -109,7 +109,7 @@ public class HouseController : Controller
 
 		var userId = User.Id();
 		var agentId = await _agentService.GetAgentIdAsync(userId);
-		var newHouseId = await _houseService.Create(model, agentId);
+		var newHouseId = await _houseService.CreateAsync(model, agentId);
 
 		return RedirectToAction(nameof(Details), new { id = newHouseId });
 
@@ -178,12 +178,44 @@ public class HouseController : Controller
 	[HttpGet]
 	public async Task<IActionResult> Delete(int id)
 	{
-		return View(new HouseFormModel());
+		if (await _houseService.ExistAsync(id) == false)
+		{
+			return BadRequest();
+		}
+
+		if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false)
+		{
+			return Unauthorized();
+		}
+
+		var house = await _houseService.HouseDetailsByIdAsync(id);
+
+		var model = new HouseDetailsViewModel
+		{
+			Id = house.Id,
+			Title = house.Title,
+			Address = house.Address,
+			ImageUrl = house.ImageUrl,
+		};
+
+		return View(model);
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> Delete(int id, HouseFormModel house)
+	public async Task<IActionResult> Delete(int id, HouseDetailsViewModel house)
 	{
+		if (await _houseService.ExistAsync(id) == false)
+		{
+			return BadRequest();
+		}
+
+		if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false)
+		{
+			return Unauthorized();
+		}
+
+		await _houseService.DeleteAsync(house.Id);
+
 		return RedirectToAction(nameof(All));
 	}
 

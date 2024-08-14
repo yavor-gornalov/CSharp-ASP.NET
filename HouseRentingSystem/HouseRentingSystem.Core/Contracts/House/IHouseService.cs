@@ -17,7 +17,9 @@ public interface IHouseService
 
 	Task<bool> CategoryExistsAsync(int categoryId);
 
-	Task<int> Create(HouseFormModel model, int agentId);
+	Task<int> CreateAsync(HouseFormModel model, int agentId);
+
+	Task DeleteAsync(int id);
 
 	Task EditAsync(int houseId, HouseFormModel model);
 
