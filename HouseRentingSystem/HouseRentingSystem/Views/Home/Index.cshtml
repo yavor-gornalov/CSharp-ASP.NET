@@ -37,7 +37,7 @@
                 <div class="carousel-caption d-none d-md-block">
                     <h5>
                         <a class="btn btn-primary" asp-controller="House" asp-action="Details"
-                           asp-route-id="@house.Id"> @house.Title</a>
+                           asp-route-information="@house.GetInformation()" asp-route-id="@house.Id"> @house.Title</a>
                     </h5>
                 </div>
             </div>
@@ -74,9 +74,9 @@
             $.get('/api/statistic', (data) => {
                 $('#total-houses').text(data.totalHouses + " Houses");
                 $('#total-rents').text(data.totalRents + " Rents");
-                $('#statistics').removeClass('d-none');
-                $('#statistics-button').hide();
+        $('#statistics').removeClass('d-none');
+               $('#statistics-button').hide();
             })
-        })
+            })
     </script>
 }

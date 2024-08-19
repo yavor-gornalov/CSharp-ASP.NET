@@ -1,10 +1,15 @@
-﻿namespace HouseRentingSystem.Core.Models.House;
+﻿using HouseRentingSystem.Core.Contracts.House;
 
-public class HouseIndexServiceModel
+namespace HouseRentingSystem.Core.Models.House;
+
+public class HouseIndexServiceModel : IHouseModel
 {
-	public int Id { get; set; }
+    public int Id { get; set; }
 
-	public string Title { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
-	public string ImageUrl { get; set; } = null!;
+    public string Address { get; set; } = null!;
+
+    public string ImageUrl { get; set; } = null!;
+
 }

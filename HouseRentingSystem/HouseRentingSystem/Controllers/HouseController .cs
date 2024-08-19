@@ -1,9 +1,11 @@
 ﻿using HouseRentingSystem.Core.Contracts.Agent;
 using HouseRentingSystem.Core.Contracts.House;
+using HouseRentingSystem.Core.Extensions;
 using HouseRentingSystem.Core.Models.House;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.VisualBasic;
 using System.Security.Claims;
 
 namespace HouseRentingSystem.Controllers;
@@ -59,7 +61,7 @@ public class HouseController : Controller
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Details(int id, string information)
     {
         if (!await _houseService.ExistAsync(id))
         {
@@ -67,6 +69,11 @@ public class HouseController : Controller
         }
 
         var model = await _houseService.HouseDetailsByIdAsync(id);
+
+        if (information != model.GetInformation())
+        {
+            return BadRequest();
+        }
 
         return View(model);
     }
@@ -111,7 +118,7 @@ public class HouseController : Controller
         var agentId = await _agentService.GetAgentIdAsync(userId);
         var newHouseId = await _houseService.CreateAsync(model, agentId);
 
-        return RedirectToAction(nameof(Details), new { id = newHouseId });
+        return RedirectToAction(nameof(Details), new { id = newHouseId, information = model.GetInformation() });
 
     }
 
@@ -172,7 +179,7 @@ public class HouseController : Controller
 
         await _houseService.EditAsync(id, house);
 
-        return RedirectToAction(nameof(Details), new { id });
+        return RedirectToAction(nameof(Details), new { id, information = house.GetInformation() });
     }
 
     [HttpGet]
