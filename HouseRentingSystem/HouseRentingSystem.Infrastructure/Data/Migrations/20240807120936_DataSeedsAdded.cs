@@ -10,11 +10,11 @@ namespace HouseRentingSystem.Data.Migrations
         {
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "bc85d3cc-2362-404b-89fd-81b6578d6bbe", "ApplicationUser", "guest@mail.com", false, "Teodor", "Lesly", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAEAACcQAAAAED98lA2vEthTgvXVVAeXhW5F7/kRAkhOYdw1Eevs53WbNVbHeF5ji+/j+iPB0Ie39g==", null, false, "43cd1e4d-6b6d-436e-9375-efad0b98e759", false, "guest@mail.com" },
-                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "81c36b20-994f-4a02-92f3-9993d898b9f8", "ApplicationUser", "agent@mail.com", false, "Linda", "Michaels", false, null, "agent@mail.com", "agent@mail.com", "AQAAAAEAACcQAAAAEEtZncGbcq98WAbjD3/omsHhd1sPxgpl+QS+K4wIFSHh7jTkwjE7pVxC3T7j/tGnEQ==", null, false, "a8d389d0-e379-4e50-9292-0cef18b5f003", false, "agent@mail.com" }
+                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "3867432b-948a-49a6-91d0-29bef56112ba", "guest@mail.com", false, false, null, "guest@mail.com", "guest@mail.com", "AQAAAAEAACcQAAAAEEUBVwrdtBpYm2eIPdrhNUQfAnchuj42AvDkLfUX2tLiVzSQzL9hYmWnFefThgh6YQ==", null, false, "34341b75-03cc-40d1-9888-ca48b0303807", false, "guest@mail.com" },
+                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "7c862b04-705b-455b-a3e2-6285375dc500", "agent@mail.com", false, false, null, "agent@mail.com", "agent@mail.com", "AQAAAAEAACcQAAAAEFYEtNJcSwY5eHJkhgy8Bt3pUxWVbxW9jBZUToKnuwOy7ONvQBlwwIOBNRG2Ge/e9A==", null, false, "b98155ff-41ef-4265-8f5a-ae068ab81432", false, "agent@mail.com" }
                 });
 
             migrationBuilder.InsertData(
