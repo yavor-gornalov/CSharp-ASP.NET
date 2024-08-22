@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HouseRentingSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240807120936_DataSeedsAdded")]
-    partial class DataSeedsAdded
+    [Migration("20240822013043_ApplicationUserAdded")]
+    partial class ApplicationUserAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.31")
+                .HasAnnotation("ProductVersion", "6.0.33")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -239,6 +239,10 @@ namespace HouseRentingSystem.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -291,39 +295,7 @@ namespace HouseRentingSystem.Data.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "dea12856-c198-4129-b3f3-b893d8395082",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7c862b04-705b-455b-a3e2-6285375dc500",
-                            Email = "agent@mail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "agent@mail.com",
-                            NormalizedUserName = "agent@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFYEtNJcSwY5eHJkhgy8Bt3pUxWVbxW9jBZUToKnuwOy7ONvQBlwwIOBNRG2Ge/e9A==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "b98155ff-41ef-4265-8f5a-ae068ab81432",
-                            TwoFactorEnabled = false,
-                            UserName = "agent@mail.com"
-                        },
-                        new
-                        {
-                            Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "3867432b-948a-49a6-91d0-29bef56112ba",
-                            Email = "guest@mail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "guest@mail.com",
-                            NormalizedUserName = "guest@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEUBVwrdtBpYm2eIPdrhNUQfAnchuj42AvDkLfUX2tLiVzSQzL9hYmWnFefThgh6YQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "34341b75-03cc-40d1-9888-ca48b0303807",
-                            TwoFactorEnabled = false,
-                            UserName = "guest@mail.com"
-                        });
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -411,9 +383,64 @@ namespace HouseRentingSystem.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("HouseRentingSystem.Infrastructure.Data.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "dea12856-c198-4129-b3f3-b893d8395082",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4d5c1c2c-e5f8-44a7-b06a-1da0098b6d21",
+                            Email = "agent@mail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "agent@mail.com",
+                            NormalizedUserName = "agent@mail.com",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAFrcJxikf4qmEWSaMWTzdiADQDjo6ICMkbcC/b1Yj+PBT73+a85NZPgA2T/NJprXQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "d2b99588-b40d-43a9-b6de-63c35baca936",
+                            TwoFactorEnabled = false,
+                            UserName = "agent@mail.com",
+                            FirstName = "Linda",
+                            LastName = "Michaels"
+                        },
+                        new
+                        {
+                            Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "36acc937-8d4f-487b-a6a7-9c5f5b53b34c",
+                            Email = "guest@mail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "guest@mail.com",
+                            NormalizedUserName = "guest@mail.com",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKQeOE4/kVZISTM0TTaXX2CEIUshcd99TGkfLPnYsKwEfF9TmMoL2m5DWDWAh6O9kQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "10428f80-a2a1-4ec8-b24a-ca7b466e30e2",
+                            TwoFactorEnabled = false,
+                            UserName = "guest@mail.com",
+                            FirstName = "Teodor",
+                            LastName = "Lesly"
+                        });
+                });
+
             modelBuilder.Entity("HouseRentingSystem.Infrastructure.Data.Models.Agent", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                    b.HasOne("HouseRentingSystem.Infrastructure.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -425,7 +452,7 @@ namespace HouseRentingSystem.Data.Migrations
             modelBuilder.Entity("HouseRentingSystem.Infrastructure.Data.Models.House", b =>
                 {
                     b.HasOne("HouseRentingSystem.Infrastructure.Data.Models.Agent", "Agent")
-                        .WithMany()
+                        .WithMany("Houses")
                         .HasForeignKey("AgentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -490,6 +517,11 @@ namespace HouseRentingSystem.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HouseRentingSystem.Infrastructure.Data.Models.Agent", b =>
+                {
+                    b.Navigation("Houses");
                 });
 
             modelBuilder.Entity("HouseRentingSystem.Infrastructure.Data.Models.Category", b =>

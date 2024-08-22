@@ -4,17 +4,38 @@
 
 namespace HouseRentingSystem.Data.Migrations
 {
-    public partial class DataSeedsAdded : Migration
+    public partial class ApplicationUserAdded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "Discriminator",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "FirstName",
+                table: "AspNetUsers",
+                type: "nvarchar(12)",
+                maxLength: 12,
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
+                table: "AspNetUsers",
+                type: "nvarchar(15)",
+                maxLength: 15,
+                nullable: true);
+
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "3867432b-948a-49a6-91d0-29bef56112ba", "guest@mail.com", false, false, null, "guest@mail.com", "guest@mail.com", "AQAAAAEAACcQAAAAEEUBVwrdtBpYm2eIPdrhNUQfAnchuj42AvDkLfUX2tLiVzSQzL9hYmWnFefThgh6YQ==", null, false, "34341b75-03cc-40d1-9888-ca48b0303807", false, "guest@mail.com" },
-                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "7c862b04-705b-455b-a3e2-6285375dc500", "agent@mail.com", false, false, null, "agent@mail.com", "agent@mail.com", "AQAAAAEAACcQAAAAEFYEtNJcSwY5eHJkhgy8Bt3pUxWVbxW9jBZUToKnuwOy7ONvQBlwwIOBNRG2Ge/e9A==", null, false, "b98155ff-41ef-4265-8f5a-ae068ab81432", false, "agent@mail.com" }
+                    { "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e", 0, "36acc937-8d4f-487b-a6a7-9c5f5b53b34c", "ApplicationUser", "guest@mail.com", false, "Teodor", "Lesly", false, null, "guest@mail.com", "guest@mail.com", "AQAAAAEAACcQAAAAEKQeOE4/kVZISTM0TTaXX2CEIUshcd99TGkfLPnYsKwEfF9TmMoL2m5DWDWAh6O9kQ==", null, false, "10428f80-a2a1-4ec8-b24a-ca7b466e30e2", false, "guest@mail.com" },
+                    { "dea12856-c198-4129-b3f3-b893d8395082", 0, "4d5c1c2c-e5f8-44a7-b06a-1da0098b6d21", "ApplicationUser", "agent@mail.com", false, "Linda", "Michaels", false, null, "agent@mail.com", "agent@mail.com", "AQAAAAEAACcQAAAAEAFrcJxikf4qmEWSaMWTzdiADQDjo6ICMkbcC/b1Yj+PBT73+a85NZPgA2T/NJprXQ==", null, false, "d2b99588-b40d-43a9-b6de-63c35baca936", false, "agent@mail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -94,6 +115,18 @@ namespace HouseRentingSystem.Data.Migrations
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "dea12856-c198-4129-b3f3-b893d8395082");
+
+            migrationBuilder.DropColumn(
+                name: "Discriminator",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "FirstName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "LastName",
+                table: "AspNetUsers");
         }
     }
 }
