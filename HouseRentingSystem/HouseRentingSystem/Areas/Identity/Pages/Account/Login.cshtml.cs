@@ -88,6 +88,8 @@ namespace HouseRentingSystem.Areas.Identity.Pages.Account
 
             returnUrl ??= Url.Content("~/");
 
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
             ReturnUrl = returnUrl;
         }
 
@@ -108,11 +110,6 @@ namespace HouseRentingSystem.Areas.Identity.Pages.Account
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
                 }
                 else
                 {
