@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+using static HouseRentingSystem.Infrastructure.Common.CustomClaims;
+
 namespace HouseRentingSystem.Data
 {
     public class ApplicationDbContext : IdentityDbContext
@@ -12,10 +14,16 @@ namespace HouseRentingSystem.Data
         {
         }
 
+        private IdentityUserClaim<string> AgentUserClaim { get; set; } = null!;
+        private IdentityUserClaim<string> GuestUserClaim { get; set; } = null!;
+        private IdentityUserClaim<string> AdminUserClaim { get; set; } = null!;
+
         private ApplicationUser AgentUser { get; set; } = null!;
         private ApplicationUser GuestUser { get; set; } = null!;
+        private ApplicationUser AdminUser { get; set; } = null!;
 
         private Agent Agent { get; set; } = null!;
+        private Agent AdminAgent { get; set; } = null!;
 
         private Category CottageCategory { get; set; } = null!;
         private Category SingleCategory { get; set; } = null!;
@@ -50,12 +58,19 @@ namespace HouseRentingSystem.Data
             SeedUsers();
             builder
                 .Entity<ApplicationUser>()
-                .HasData(AgentUser, GuestUser);
+                .HasData(
+                    AgentUser,
+                    GuestUser,
+                    AdminUser
+                );
 
             SeedAgent();
             builder
                 .Entity<Agent>()
-                .HasData(Agent);
+                .HasData(
+                    Agent,
+                    AdminAgent
+                );
 
             SeedCategories();
             builder
@@ -100,7 +115,21 @@ namespace HouseRentingSystem.Data
             };
 
             GuestUser.PasswordHash =
-            hasher.HashPassword(AgentUser, "guest123");
+            hasher.HashPassword(GuestUser, "guest123");
+
+            AdminUser = new ApplicationUser()
+            {
+                Id = "f1b0b8e3-6b7d-4b3e-8b1b-3f3e1b7e6b1e",
+                Email = "admin@mail.com",
+                NormalizedEmail = "ADMIN@MAIL.COM",
+                UserName = "admin@mail.com",
+                NormalizedUserName = "ADMIN@MAIL.COM",
+                FirstName = "Great",
+                LastName = "Admin",
+            };
+
+            AdminUser.PasswordHash =
+            hasher.HashPassword(AdminUser, "admin123");
         }
 
         private void SeedAgent()
@@ -110,6 +139,40 @@ namespace HouseRentingSystem.Data
                 Id = 1,
                 PhoneNumber = "+359888888888",
                 UserId = AgentUser.Id
+            };
+
+            AdminAgent = new Agent()
+            {
+                Id = 3,
+                PhoneNumber = "+359888111111",
+                UserId = AdminUser.Id
+            };
+        }
+
+        private void SeedUserClaims()
+        {
+            AgentUserClaim = new IdentityUserClaim<string>()
+            {
+                Id = 1,
+                UserId = AgentUser.Id,
+                ClaimType = FullNameClaimType,
+                ClaimValue = string.Join(" ", AgentUser.FirstName, AgentUser.LastName)
+            };
+
+            GuestUserClaim = new IdentityUserClaim<string>()
+            {
+                Id = 2,
+                UserId = GuestUser.Id,
+                ClaimType = FullNameClaimType,
+                ClaimValue = string.Join(" ", GuestUser.FirstName, GuestUser.LastName)
+            };
+
+            AdminUserClaim = new IdentityUserClaim<string>()
+            {
+                Id = 3,
+                UserId = AdminUser.Id,
+                ClaimType = FullNameClaimType,
+                ClaimValue = string.Join(" ", AdminUser.FirstName, AdminUser.LastName)
             };
         }
 
@@ -142,7 +205,7 @@ namespace HouseRentingSystem.Data
                 Title = "Big House Marina",
                 Address = "North London, UK (near the border)",
                 Description = "A big house for your whole family. Don't miss to buy a house with three bedrooms.",
-                ImageUrl = "https://www.luxury-architecture.net/wp-content/uploads/2017/12/1513217889-7597-FAIRWAYS-010.jpg",
+                ImageUrl = "https://www.shutterstock.com/shutterstock/photos/338950502/display_1500/stock-photo-big-luxury-modern-house-at-dusk-night-time-in-suburbs-of-vancouver-canada-338950502.jpg",
                 PricePerMonth = 2100.00M,
                 CategoryId = DuplexCategory.Id,
                 AgentId = Agent.Id,
