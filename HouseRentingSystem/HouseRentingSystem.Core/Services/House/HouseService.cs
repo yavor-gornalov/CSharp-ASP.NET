@@ -5,6 +5,8 @@ using HouseRentingSystem.Core.Models.House;
 using HouseRentingSystem.Data;
 using Microsoft.EntityFrameworkCore;
 
+using static HouseRentingSystem.Infrastructure.Common.CustomClaims;
+
 namespace HouseRentingSystem.Core.Services.House;
 
 public class HouseService : IHouseService
@@ -154,6 +156,7 @@ public class HouseService : IHouseService
                 Category = h.Category.Name,
                 Agent = new AgentServiceModel
                 {
+                    FullName = string.Join(" ", h.Agent.User.FirstName, h.Agent.User.LastName),
                     PhoneNumber = h.Agent.PhoneNumber,
                     Email = h.Agent.User.Email,
                 }
