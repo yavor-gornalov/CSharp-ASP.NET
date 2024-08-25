@@ -64,12 +64,21 @@ namespace HouseRentingSystem.Data
                     AdminUser
                 );
 
-            SeedAgent();
+            SeedAgents();
             builder
                 .Entity<Agent>()
                 .HasData(
                     Agent,
                     AdminAgent
+                );
+
+            SeedUserClaims();
+            builder
+                .Entity<IdentityUserClaim<string>>()
+                .HasData(
+                    AgentUserClaim,
+                    GuestUserClaim,
+                    AdminUserClaim
                 );
 
             SeedCategories();
@@ -132,7 +141,7 @@ namespace HouseRentingSystem.Data
             hasher.HashPassword(AdminUser, "admin123");
         }
 
-        private void SeedAgent()
+        private void SeedAgents()
         {
             Agent = new Agent()
             {
