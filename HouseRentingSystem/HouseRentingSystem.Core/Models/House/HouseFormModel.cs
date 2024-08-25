@@ -23,7 +23,7 @@ public class HouseFormModel : IHouseModel
     public string ImageUrl { get; set; } = null!;
 
     [Required]
-    [Range(typeof(decimal), HousePricePerMonthMinValue, HousePricePerMonthMaxValue,
+    [Range(typeof(decimal), HousePricePerMonthMinValue, HousePricePerMonthMaxValue, ConvertValueInInvariantCulture = true,
         ErrorMessage = "Price Per Month must be a positive number and less than {2} leva.")]
     [Display(Name = "Price Per Month")]
     public decimal PricePerMonth { get; set; }

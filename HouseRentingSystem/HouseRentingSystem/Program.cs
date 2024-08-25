@@ -5,11 +5,14 @@ using HouseRentingSystem.Core.Contracts.Statistics;
 using HouseRentingSystem.Core.Services.Agent;
 using HouseRentingSystem.Core.Services.House;
 using HouseRentingSystem.Core.Services.Statistics;
+using HouseRentingSystem.CustomModelBinders;
 using HouseRentingSystem.Data;
 using HouseRentingSystem.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +34,26 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 builder.Services.AddTransient<IHouseService, HouseService>();
 builder.Services.AddTransient<IAgentService, AgentService>();
 builder.Services.AddTransient<IStatisticsService, StatisticsService>();
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new List<CultureInfo>
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("bg-BG"),
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("bg-BG");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
 builder.Services.AddControllersWithViews(options =>
 {
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
     options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
 });
+
 
 var app = builder.Build();
 
