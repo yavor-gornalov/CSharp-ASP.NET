@@ -20,7 +20,7 @@ public class AgentController : Controller
 	{
         var userId = User.Id();
 
-        if (await _agentService.ExistByIdAsync(userId))
+        if (await _agentService.ExistsByIdAsync(userId))
         {
             return BadRequest();
         }
@@ -33,7 +33,7 @@ public class AgentController : Controller
 	{
 		var userId = User.Id();
 
-		if (await _agentService.ExistByIdAsync(userId))
+		if (await _agentService.ExistsByIdAsync(userId))
 		{
 			return BadRequest();
 		}

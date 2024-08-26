@@ -47,7 +47,7 @@ public class HouseController : Controller
 
         var userId = User.Id();
 
-        if (await _agentService.ExistByIdAsync(userId))
+        if (await _agentService.ExistsByIdAsync(userId))
         {
             var currentAgentId = await _agentService.GetAgentIdAsync(userId);
             myHouses = await _houseService.AllHousesByAgentIdAsync(currentAgentId);
@@ -81,7 +81,7 @@ public class HouseController : Controller
     public async Task<IActionResult> Add()
     {
         var userId = User.Id();
-        if (await _agentService.ExistByIdAsync(userId) == false)
+        if (await _agentService.ExistsByIdAsync(userId) == false)
         {
             return RedirectToAction(nameof(AgentController.Become), "Agent");
         }
@@ -97,7 +97,7 @@ public class HouseController : Controller
     [HttpPost]
     public async Task<IActionResult> Add(HouseFormModel model)
     {
-        if (await _agentService.ExistByIdAsync(User.Id()) == false)
+        if (await _agentService.ExistsByIdAsync(User.Id()) == false)
         {
             return RedirectToAction(nameof(AgentController.Become), "Agent");
         }
@@ -130,7 +130,7 @@ public class HouseController : Controller
             return BadRequest();
         }
 
-        if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false)
+        if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false && User.IsAdmin() == false)
         {
             return Unauthorized();
         }
@@ -161,7 +161,7 @@ public class HouseController : Controller
             return BadRequest();
         }
 
-        if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false)
+        if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false && User.IsAdmin() == false)
         {
             return Unauthorized();
         }
@@ -190,7 +190,7 @@ public class HouseController : Controller
             return BadRequest();
         }
 
-        if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false)
+        if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false && User.IsAdmin() == false)
         {
             return Unauthorized();
         }
@@ -216,7 +216,7 @@ public class HouseController : Controller
             return BadRequest();
         }
 
-        if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false)
+        if (await _houseService.HasAgentWithIdAsync(id, User.Id()) == false && User.IsAdmin() == false)
         {
             return Unauthorized();
         }
@@ -234,7 +234,7 @@ public class HouseController : Controller
             return BadRequest();
         }
 
-        if (await _agentService.ExistByIdAsync(User.Id()))
+        if (await _agentService.ExistsByIdAsync(User.Id()) && User.IsAdmin() == false)
         {
             return Unauthorized();
         }

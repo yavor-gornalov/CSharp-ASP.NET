@@ -25,7 +25,7 @@ public class AgentService : IAgentService
 		await _context.SaveChangesAsync();
 	}
 
-	public async Task<bool> ExistByIdAsync(string userId)
+	public async Task<bool> ExistsByIdAsync(string userId)
 	{
 		return await _context.Agents
 			.AnyAsync(a => a.UserId == userId);
