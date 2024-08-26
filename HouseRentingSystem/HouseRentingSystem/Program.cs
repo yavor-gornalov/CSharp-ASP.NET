@@ -7,6 +7,7 @@ using HouseRentingSystem.Core.Services.House;
 using HouseRentingSystem.Core.Services.Statistics;
 using HouseRentingSystem.CustomModelBinders;
 using HouseRentingSystem.Data;
+using HouseRentingSystem.Extesions;
 using HouseRentingSystem.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -29,6 +30,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
 })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddTransient<IHouseService, HouseService>();
@@ -88,6 +90,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
 });
 
-
+await app.CreateAdminRoleAsync();
 
 app.Run();
