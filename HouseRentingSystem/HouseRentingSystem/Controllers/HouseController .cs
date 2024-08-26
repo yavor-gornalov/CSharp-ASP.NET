@@ -260,7 +260,10 @@ public class HouseController : Controller
 
         if (await _houseService.IsRentedByUserWithIdAsync(id, User.Id()) == false)
         {
-            return Unauthorized();
+            if (User.IsAdmin() == false)
+            {
+                return Unauthorized();
+            }
         }
 
         await _houseService.LeaveAsync(id);

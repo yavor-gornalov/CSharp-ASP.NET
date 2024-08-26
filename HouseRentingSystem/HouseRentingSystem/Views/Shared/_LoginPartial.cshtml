@@ -1,17 +1,18 @@
-﻿@using HouseRentingSystem.Infrastructure.Data.Models
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
+﻿@inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IAgentService _agentService
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         var userName = User.FindFirstValue(FullNameClaimType) ?? User?.Identity?.Name;
 
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Become">Become Agent</a>
-        </li>
-
+        if (await _agentService.ExistsByIdAsync(User.Id()) == false)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Become">Become Agent</a>
+            </li>
+        }
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello, @userName!</a>
         </li>
