@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
 
+using static HouseRentingSystem.Infrastructure.Common.AdministratorConstants;
+
 namespace HouseRentingSystem.Controllers;
 
 [Authorize]
@@ -43,6 +45,11 @@ public class HouseController : Controller
 
     public async Task<IActionResult> Mine()
     {
+        if (User.IsInRole(AdminRoleName))
+        {
+            return RedirectToAction("Mine", "House", new { area = AdminAreaName });
+        }
+
         IEnumerable<HouseServiceModel>? myHouses = null;
 
         var userId = User.Id();
