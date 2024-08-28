@@ -2,9 +2,11 @@ using HouseRentingSystem.Controllers;
 using HouseRentingSystem.Core.Contracts.Agent;
 using HouseRentingSystem.Core.Contracts.House;
 using HouseRentingSystem.Core.Contracts.Statistics;
+using HouseRentingSystem.Core.Contracts.User;
 using HouseRentingSystem.Core.Services.Agent;
 using HouseRentingSystem.Core.Services.House;
 using HouseRentingSystem.Core.Services.Statistics;
+using HouseRentingSystem.Core.Services.User;
 using HouseRentingSystem.CustomModelBinders;
 using HouseRentingSystem.Data;
 using HouseRentingSystem.Extesions;
@@ -35,6 +37,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 
 builder.Services.AddTransient<IHouseService, HouseService>();
 builder.Services.AddTransient<IAgentService, AgentService>();
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IStatisticsService, StatisticsService>();
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>

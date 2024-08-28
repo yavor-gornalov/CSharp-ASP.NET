@@ -5,7 +5,7 @@ namespace HouseRentingSystem.Areas.Admin.Controllers;
 
 public class HomeController : AdminController
 {
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         if (User.IsInRole(AdminRoleName))
         {
