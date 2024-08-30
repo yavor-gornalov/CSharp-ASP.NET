@@ -23,6 +23,8 @@ using Microsoft.Extensions.Logging;
 using static HouseRentingSystem.Infrastructure.Common.ValidationConstants;
 using static HouseRentingSystem.Infrastructure.Common.CustomClaims;
 using System.Security.Claims;
+using Microsoft.Extensions.Caching.Memory;
+using HouseRentingSystem.Infrastructure.Common;
 
 namespace HouseRentingSystem.Areas.Identity.Pages.Account
 {
@@ -34,13 +36,15 @@ namespace HouseRentingSystem.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IMemoryCache _memoryCache;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IMemoryCache memoryCache)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -48,6 +52,7 @@ namespace HouseRentingSystem.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -160,6 +165,7 @@ namespace HouseRentingSystem.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+                        _memoryCache.Remove(AdministratorConstants.UserCacheKey);
                         return LocalRedirect(returnUrl);
                     }
                 }
