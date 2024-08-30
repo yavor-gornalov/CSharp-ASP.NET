@@ -4,8 +4,7 @@ using HouseRentingSystem.Core.Extensions;
 using HouseRentingSystem.Core.Models.House;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.VisualBasic;
+using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 
 using static HouseRentingSystem.Infrastructure.Common.AdministratorConstants;
@@ -17,11 +16,16 @@ public class HouseController : Controller
 {
     private readonly IHouseService _houseService;
     private readonly IAgentService _agentService;
+    private readonly IMemoryCache _memoryCache;
 
-    public HouseController(IHouseService houseService, IAgentService agentService)
+    public HouseController(
+        IHouseService houseService,
+        IAgentService agentService,
+        IMemoryCache memoryCache)
     {
         _houseService = houseService;
         _agentService = agentService;
+        _memoryCache = memoryCache;
     }
 
     [AllowAnonymous]
@@ -252,6 +256,7 @@ public class HouseController : Controller
         }
 
         await _houseService.RentAsync(id, User.Id());
+        _memoryCache.Remove(RentCacheKey);
 
         return RedirectToAction(nameof(All));
     }
@@ -274,6 +279,7 @@ public class HouseController : Controller
         }
 
         await _houseService.LeaveAsync(id);
+        _memoryCache.Remove(RentCacheKey);
 
         return RedirectToAction(nameof(Mine));
     }

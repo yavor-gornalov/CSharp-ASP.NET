@@ -7,4 +7,5 @@ public static class AdministratorConstants
     public const string AdminEmail = "admin@mail.com";
     public const string UserCacheKey = "UserCacheKey";
     public const string AdminCacheKey = "AdminCacheKey";
+    public const string RentCacheKey = "RentCacheKey";
 }
