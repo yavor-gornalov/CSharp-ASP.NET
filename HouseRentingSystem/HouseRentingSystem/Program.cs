@@ -45,6 +45,8 @@ builder.Services.AddTransient<IRentService, RentService>();
 // API services
 builder.Services.AddTransient<IStatisticsService, StatisticsService>();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new List<CultureInfo>
