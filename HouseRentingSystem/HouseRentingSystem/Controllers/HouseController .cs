@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 
 using static HouseRentingSystem.Infrastructure.Common.AdministratorConstants;
+using static HouseRentingSystem.Infrastructure.Common.MessageConstants;
 
 namespace HouseRentingSystem.Controllers;
 
@@ -128,6 +129,8 @@ public class HouseController : Controller
         var userId = User.Id();
         var agentId = await _agentService.GetAgentIdAsync(userId);
         var newHouseId = await _houseService.CreateAsync(model, agentId);
+
+        TempData["success"] = string.Format(AddedHouse, model.Title);
 
         return RedirectToAction(nameof(Details), new { id = newHouseId, information = model.GetInformation() });
 
@@ -257,6 +260,8 @@ public class HouseController : Controller
 
         await _houseService.RentAsync(id, User.Id());
         _memoryCache.Remove(RentCacheKey);
+
+        TempData["success"] = string.Format(AddedHouse, "asd", "asd");
 
         return RedirectToAction(nameof(All));
     }
