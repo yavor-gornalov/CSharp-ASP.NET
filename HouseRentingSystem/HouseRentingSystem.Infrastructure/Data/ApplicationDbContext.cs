@@ -9,9 +9,21 @@ namespace HouseRentingSystem.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private bool _isSeeded = false;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, bool isSeeded = true)
             : base(options)
         {
+            if (Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                Database.Migrate();
+            }
+            else
+            {
+                Database.EnsureCreated();
+            }
+
+            _isSeeded = isSeeded;
         }
 
         private IdentityUserClaim<string> AgentUserClaim { get; set; } = null!;
@@ -41,6 +53,12 @@ namespace HouseRentingSystem.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            if (!_isSeeded)
+            {
+                base.OnModelCreating(builder);
+                return;
+            }
+
             builder
                 .Entity<House>()
                 .HasOne(h => h.Category)
