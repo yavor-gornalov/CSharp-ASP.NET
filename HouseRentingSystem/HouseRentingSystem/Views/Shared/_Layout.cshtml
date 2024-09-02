@@ -61,10 +61,10 @@
             message.showSuccess('@TempData["success"]');
         </script>
     }
-    else if (TempData["error"] != null)
+    else if (TempData["warning"] != null)
     {
         <script defer>
-            message.showSuccess('@TempData["error"]');
+            message.showSuccess('@TempData["warning"]');
         </script>
     }
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Best House Renting</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stlesheet" href="~/lib/toastr/toastr.min.css" />
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HouseRentingSystem.styles.css" asp-append-version="true" />
 </head>
@@ -74,10 +74,10 @@
             message.showSuccess('@TempData["success"]');
         </script>
     }
-    else if (TempData["alert"] != null)
+    else if (TempData["warning"] != null)
     {
         <script>
-            message.showAlert('@TempData["alert"]');
+            message.showAlert('@TempData["warning"]');
         </script>
     }
 

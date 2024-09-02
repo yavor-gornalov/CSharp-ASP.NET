@@ -193,6 +193,8 @@ public class HouseController : Controller
 
         await _houseService.EditAsync(id, house);
 
+        TempData["warning"] = string.Format(EditedHouse, house.Title);
+
         return RedirectToAction(nameof(Details), new { id, information = house.GetInformation() });
     }
 
@@ -237,6 +239,8 @@ public class HouseController : Controller
 
         await _houseService.DeleteAsync(house.Id);
 
+        TempData["warning"] = string.Format(DeletedHouse, house.Title);
+
         return RedirectToAction(nameof(All));
     }
 
@@ -253,15 +257,17 @@ public class HouseController : Controller
             return Unauthorized();
         }
 
-        if (await _houseService.IsRentedAsync(id))
+        var house = await _houseService.HouseDetailsByIdAsync(id);
+
+        if (house.IsRented)
         {
             return BadRequest();
         }
 
-        await _houseService.RentAsync(id, User.Id());
+        await _houseService.RentAsync(house.Id, User.Id());
         _memoryCache.Remove(RentCacheKey);
 
-        TempData["success"] = string.Format(AddedHouse, "asd", "asd");
+        TempData["success"] = string.Format(AddedHouse, house.Title, house.PricePerMonth);
 
         return RedirectToAction(nameof(All));
     }
@@ -269,8 +275,9 @@ public class HouseController : Controller
     [HttpPost]
     public async Task<IActionResult> Leave(int id)
     {
-        if (await _houseService.ExistAsync(id) == false ||
-            await _houseService.IsRentedAsync(id) == false)
+        var house = await _houseService.HouseDetailsByIdAsync(id);
+
+        if (house == null || house.IsRented == false)
         {
             return BadRequest();
         }
@@ -285,6 +292,8 @@ public class HouseController : Controller
 
         await _houseService.LeaveAsync(id);
         _memoryCache.Remove(RentCacheKey);
+
+        TempData["warning"] = string.Format(LeftHouse, house.Title);
 
         return RedirectToAction(nameof(Mine));
     }

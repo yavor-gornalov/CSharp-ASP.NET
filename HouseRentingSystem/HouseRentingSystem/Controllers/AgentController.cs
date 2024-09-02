@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
+using static HouseRentingSystem.Infrastructure.Common.MessageConstants;
+
 namespace HouseRentingSystem.Controllers;
 
 [Authorize]
@@ -55,7 +57,9 @@ public class AgentController : Controller
 
 		await _agentService.CreateAsync(userId, model.PhoneNumber);
 
-		return RedirectToAction(nameof(HouseController.All), "House");
+		TempData["success"] = AgentCreatedSuccessMessage;
+
+        return RedirectToAction(nameof(HouseController.All), "House");
 	}
 
 }

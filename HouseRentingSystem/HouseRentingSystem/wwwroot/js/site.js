@@ -22,7 +22,7 @@
     }
 
     var showAlert = function (message) {
-        toastr["error"](message);
+        toastr["warning"](message);
     }
 
     return {
