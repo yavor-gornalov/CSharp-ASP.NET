@@ -57,14 +57,14 @@
 
     @if (TempData["success"] != null)
     {
-        <script defer>
+        <script>
             message.showSuccess('@TempData["success"]');
         </script>
     }
     else if (TempData["warning"] != null)
     {
-        <script defer>
-            message.showSuccess('@TempData["warning"]');
+        <script>
+            message.showAlert('@TempData["warning"]');
         </script>
     }
 

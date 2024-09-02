@@ -267,7 +267,7 @@ public class HouseController : Controller
         await _houseService.RentAsync(house.Id, User.Id());
         _memoryCache.Remove(RentCacheKey);
 
-        TempData["success"] = string.Format(AddedHouse, house.Title, house.PricePerMonth);
+        TempData["success"] = string.Format(RentedHouse, house.Title, house.PricePerMonth);
 
         return RedirectToAction(nameof(All));
     }
