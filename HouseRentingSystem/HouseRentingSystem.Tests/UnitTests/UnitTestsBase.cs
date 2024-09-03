@@ -23,6 +23,19 @@ public class UnitTestsBase
 
     public void SeedData()
     {
+        var Categories = new List<Category>()
+        {
+            new Category()
+            {
+                Name = "Cottage",
+            },
+            new Category()
+            {
+                Name = "Single-Family",
+            },
+        };
+        _data.Categories.AddRange(Categories);
+
         Renter = new ApplicationUser()
         {
             Id = "RenterUserId",
@@ -32,7 +45,7 @@ public class UnitTestsBase
         };
         _data.Users.Add(Renter);
 
-        Agent = new Infrastructure.Data.Models.Agent()
+        Agent = new Agent()
         {
             User = new ApplicationUser()
             {
@@ -54,10 +67,7 @@ public class UnitTestsBase
             PricePerMonth = 1000,
             Renter = Renter,
             Agent = Agent,
-            Category = new Category()
-            {
-                Name = "Cottage",
-            }
+            Category = Categories[0]
         };
         _data.Houses.Add(RentedHouse);
 
@@ -69,10 +79,7 @@ public class UnitTestsBase
             ImageUrl = "https://as1.ftcdn.net/v2/jpg/00/62/13/24/1000_F_62132429_pw8W4rc1qLlCAP9SS9pPFDZyyPJZHwpw.jpg",
             PricePerMonth = 1500,
             Agent = Agent,
-            Category = new Category()
-            {
-                Name = "Single-Family",
-            }
+            Category = Categories[1]
         };
         _data.Houses.Add(NonRentedHouse);
 
