@@ -17,22 +17,21 @@ public class UnitTestsBase
 
     public ApplicationUser Renter { get; private set; } = null!;
 
-    public Infrastructure.Data.Models.Agent Agent { get; private set; } = null!;
+    public Agent Agent { get; private set; } = null!;
 
-    public House House { get; private set; } = null!;
+    public House RentedHouse { get; private set; } = null!;
+
+    public House NonRentedHouse { get; private set; } = null!;
+
+    public Category[] Categories { get; private set; } = null!;
 
     public void SeedData()
     {
-        var Categories = new List<Category>()
+        Categories = new Category[]
         {
-            new Category()
-            {
-                Name = "Cottage",
-            },
-            new Category()
-            {
-                Name = "Single-Family",
-            },
+            new Category() { Name = "Cottage" },
+            new Category() { Name = "Single" },
+            new Category() { Name = "Duplex" },
         };
         _data.Categories.AddRange(Categories);
 
@@ -58,7 +57,7 @@ public class UnitTestsBase
         };
         _data.Agents.Add(Agent);
 
-        var RentedHouse = new House()
+        RentedHouse = new House()
         {
             Title = "First Test House",
             Address = "Test Address, 201 Str.",
@@ -71,7 +70,7 @@ public class UnitTestsBase
         };
         _data.Houses.Add(RentedHouse);
 
-        var NonRentedHouse = new House()
+        NonRentedHouse = new House()
         {
             Title = "Second Test House",
             Address = "Test Address, 202 Str.",
