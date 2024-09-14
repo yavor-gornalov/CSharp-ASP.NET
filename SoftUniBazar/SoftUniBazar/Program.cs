@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SoftUniBazar.Data;
+using SoftUniBazar.Infrastructure.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
