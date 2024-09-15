@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SoftUniBazar.Models;
 using System.Diagnostics;
 
 namespace SoftUniBazar.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        [AllowAnonymous]
         public IActionResult Index()
         {
+            if (IsUserLoggedIn)
+            {
+                return RedirectToAction("All", "Ad");
+            }
             return View();
         }
 
