@@ -18,7 +18,8 @@ public static class ModelBuilderExtension
     {
         builder.ApplyConfiguration(new SeedCategories());
         builder.ApplyConfiguration(new SeedUsers());
-        //builder.ApplyConfiguration(new SeedAds());
+        builder.ApplyConfiguration(new SeedAds());
+        builder.ApplyConfiguration(new AdBuyersSeed());
     }
 
 }

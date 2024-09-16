@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoftUniBazar.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SoftUniBazar.Infrastructure.Data;
 namespace SoftUniBazar.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(BazarDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240916184447_AdsSeeded")]
+    partial class AdsSeeded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,15 +146,15 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                         {
                             Id = "493ba206-c3d5-4f28-8372-7824f4bbcf9e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0cda6a1e-4a81-4c98-9d50-007f2ac4205e",
+                            ConcurrencyStamp = "0428ab65-5e43-4085-8e9a-c8a195e9c3c6",
                             Email = "guest@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "GUEST@SOFTUNI.COM",
                             NormalizedUserName = "guest",
-                            PasswordHash = "AQAAAAIAAYagAAAAELOwN5ql0C6CcMPZkF29euOng/OSmwxjL5zARdbqcDtiDNiuIH4lsU4VHLGfXY1k3A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIHQ0fZlWYDqEtmk3z6uoK+J9DaTAmrsUVcKWuvXlEnSY4K94HD0on+pAZD66uMDrQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "726fb172-69e0-4b8c-9a8d-b8928ff942da",
+                            SecurityStamp = "8206d977-b391-4ded-9dff-1d231aebf4f2",
                             TwoFactorEnabled = false,
                             UserName = "guest"
                         },
@@ -159,15 +162,15 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                         {
                             Id = "7a02b826-8f95-44b9-baa6-a4b9804daa3c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "02995dba-82d0-443c-ad8a-a4060ae7b7dc",
+                            ConcurrencyStamp = "e4589f8b-4618-4f16-9700-919d4f699c6a",
                             Email = "buyer@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "BUYER@SOFTUNI.COM",
                             NormalizedUserName = "buyer",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDxoASOeVEfuqI5wfnnvhSwiYK3lygBDKR/79MQQnpqdJEL04sc7Z/6maw0+r7Eq/Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEH74y82QiFHC3EwLUrM+PcwwbMkXmHyVixx/KkCzTsj780i3Q9FQWz3NtX/sUEEFhA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "75ff625c-3ab9-4567-b7ab-9f1eaf3635f5",
+                            SecurityStamp = "a44ba5ce-6410-47cf-a7ec-e115fd57a119",
                             TwoFactorEnabled = false,
                             UserName = "buyer"
                         },
@@ -175,14 +178,14 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                         {
                             Id = "0b5ca5a6-5732-4895-a96c-cce811834780",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ddab6020-948d-4adb-8b8e-e0e949cf3619",
+                            ConcurrencyStamp = "570595ab-bed5-427f-aec1-f56b1c27839f",
                             Email = "seller@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "SELLER@SOFTUNI.COM",
                             NormalizedUserName = "seller",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "12a3f99d-439e-4b90-900b-eff58daa7bce",
+                            SecurityStamp = "1e512070-2626-46bf-b0ed-8a0da39b80bd",
                             TwoFactorEnabled = false,
                             UserName = "seller"
                         });
@@ -354,18 +357,6 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                     b.HasIndex("AdId");
 
                     b.ToTable("AdBuyers");
-
-                    b.HasData(
-                        new
-                        {
-                            BuyerId = "7a02b826-8f95-44b9-baa6-a4b9804daa3c",
-                            AdId = 1
-                        },
-                        new
-                        {
-                            BuyerId = "7a02b826-8f95-44b9-baa6-a4b9804daa3c",
-                            AdId = 2
-                        });
                 });
 
             modelBuilder.Entity("SoftUniBazar.Infrastructure.Data.Models.Category", b =>
