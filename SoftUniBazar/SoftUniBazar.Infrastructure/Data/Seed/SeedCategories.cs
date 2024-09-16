@@ -4,7 +4,7 @@ using SoftUniBazar.Infrastructure.Data.Models;
 
 namespace SoftUniBazar.Infrastructure.Data.Seed;
 
-public class CategorySeed : IEntityTypeConfiguration<Category>
+public class SeedCategories : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {

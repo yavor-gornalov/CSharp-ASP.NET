@@ -9,14 +9,16 @@ public static class ModelBuilderExtension
 {
     public static void Configure ( this ModelBuilder builder)
     {
-        builder.ApplyConfiguration<Category>(new CategoryConfiguration());
-        builder.ApplyConfiguration<Ad>(new AdConfiguration());
-        builder.ApplyConfiguration<AdBuyer>(new AdBuyerConfiguration());
+        builder.ApplyConfiguration(new CategoryConfiguration());
+        builder.ApplyConfiguration(new AdConfiguration());
+        builder.ApplyConfiguration(new AdBuyerConfiguration());
     }
     
     public static void Seed(this ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new CategorySeed());
+        builder.ApplyConfiguration(new SeedCategories());
+        builder.ApplyConfiguration(new SeedUsers());
+        //builder.ApplyConfiguration(new SeedAds());
     }
 
 }
