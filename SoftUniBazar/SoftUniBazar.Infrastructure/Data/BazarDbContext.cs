@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SoftUniBazar.Infrastructure.Data.Extensions;
 using SoftUniBazar.Infrastructure.Data.Models;
 
 namespace SoftUniBazar.Infrastructure.Data;
@@ -17,43 +18,8 @@ public class BazarDbContext : IdentityDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AdBuyer>()
-            .HasKey(ab => new { ab.BuyerId, ab.AdId });
-
-        modelBuilder.Entity<AdBuyer>()
-            .HasOne(ab => ab.Ad)
-            .WithMany(a => a.AdBuyers)
-            .HasForeignKey(ab => ab.AdId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder
-            .Entity<Category>()
-            .HasData(new Category()
-            {
-                Id = 1,
-                Name = "Books"
-            },
-            new Category()
-            {
-                Id = 2,
-                Name = "Cars"
-            },
-            new Category()
-            {
-                Id = 3,
-                Name = "Clothes"
-            },
-            new Category()
-            {
-                Id = 4,
-                Name = "Home"
-            },
-            new Category()
-            {
-                Id = 5,
-                Name = "Technology"
-            });
-
+        modelBuilder.Configure();
+        modelBuilder.Seed();
         base.OnModelCreating(modelBuilder);
     }
 }
