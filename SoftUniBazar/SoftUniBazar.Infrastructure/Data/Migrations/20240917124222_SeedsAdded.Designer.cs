@@ -12,8 +12,8 @@ using SoftUniBazar.Infrastructure.Data;
 namespace SoftUniBazar.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(BazarDbContext))]
-    [Migration("20240916184447_AdsSeeded")]
-    partial class AdsSeeded
+    [Migration("20240917124222_SeedsAdded")]
+    partial class SeedsAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,48 +146,49 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                         {
                             Id = "493ba206-c3d5-4f28-8372-7824f4bbcf9e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0428ab65-5e43-4085-8e9a-c8a195e9c3c6",
+                            ConcurrencyStamp = "e7423796-f215-4331-bca3-599a91780e0e",
                             Email = "guest@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "GUEST@SOFTUNI.COM",
-                            NormalizedUserName = "guest",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIHQ0fZlWYDqEtmk3z6uoK+J9DaTAmrsUVcKWuvXlEnSY4K94HD0on+pAZD66uMDrQ==",
+                            NormalizedUserName = "GUEST@SOFTUNI.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJY4c5Nof/fttgzbg1E6Z6n1hxsV4rH4o90cbH4GolMK/8hDeB1nSNvAl4fATFTcwg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8206d977-b391-4ded-9dff-1d231aebf4f2",
+                            SecurityStamp = "2abcfaf0-7487-4405-a129-124fd1f3fd87",
                             TwoFactorEnabled = false,
-                            UserName = "guest"
+                            UserName = "guest@softuni.com"
                         },
                         new
                         {
                             Id = "7a02b826-8f95-44b9-baa6-a4b9804daa3c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e4589f8b-4618-4f16-9700-919d4f699c6a",
+                            ConcurrencyStamp = "9d4f5add-2f66-4082-86d3-30f79bca1571",
                             Email = "buyer@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "BUYER@SOFTUNI.COM",
-                            NormalizedUserName = "buyer",
-                            PasswordHash = "AQAAAAIAAYagAAAAEH74y82QiFHC3EwLUrM+PcwwbMkXmHyVixx/KkCzTsj780i3Q9FQWz3NtX/sUEEFhA==",
+                            NormalizedUserName = "BUYER@SOFTUNI.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEE3qz/ngUVnwWHU9RXG/+kurJBN0Zc31CCzxjZg+eO52P1gk+23cgtyn/Ug6KBGqlQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a44ba5ce-6410-47cf-a7ec-e115fd57a119",
+                            SecurityStamp = "d85c27ad-6af0-4443-9338-602798c647f3",
                             TwoFactorEnabled = false,
-                            UserName = "buyer"
+                            UserName = "buyer@softuni.com"
                         },
                         new
                         {
                             Id = "0b5ca5a6-5732-4895-a96c-cce811834780",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "570595ab-bed5-427f-aec1-f56b1c27839f",
+                            ConcurrencyStamp = "8e79271c-e0ec-49d0-aada-02a31a07aef6",
                             Email = "seller@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "SELLER@SOFTUNI.COM",
-                            NormalizedUserName = "seller",
+                            NormalizedUserName = "SELLER@SOFTUNI.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEB9wfmnYGuxuRBTq/zRTtSbM8nY8wBdIFxefhA+zyM0GdwGjdHqj/hUDEIvKxMr20w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1e512070-2626-46bf-b0ed-8a0da39b80bd",
+                            SecurityStamp = "aa00a083-2e30-4111-818a-2b8faa9f36d1",
                             TwoFactorEnabled = false,
-                            UserName = "seller"
+                            UserName = "seller@softuni.com"
                         });
                 });
 
@@ -324,23 +325,23 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 4,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2024, 9, 15, 19, 15, 0, 0, DateTimeKind.Unspecified),
                             Description = "I have three flowers for selling. They love sunlight and need watering three times a week.",
                             ImageUrl = "https://hips.hearstapps.com/hmg-prod/images/spring-flowers-65de4a13478ee.jpg",
                             Name = "Flowers",
-                            OwnerId = "493ba206-c3d5-4f28-8372-7824f4bbcf9e",
+                            OwnerId = "0b5ca5a6-5732-4895-a96c-cce811834780",
                             Price = 15m
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2024, 9, 17, 14, 30, 0, 0, DateTimeKind.Unspecified),
                             Description = "I have a car for selling. It is in a good condition and has a new battery.",
                             ImageUrl = "https://listings-prod.tcimg.net/listings/146110/48/82/1G1FW6S05P4138248/BF5GFZDUSPJ4G6VPYYJCY4WJV4-og-860.jpg",
                             Name = "Car",
-                            OwnerId = "493ba206-c3d5-4f28-8372-7824f4bbcf9e",
-                            Price = 15000m
+                            OwnerId = "0b5ca5a6-5732-4895-a96c-cce811834780",
+                            Price = 12000m
                         });
                 });
 
@@ -357,6 +358,18 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                     b.HasIndex("AdId");
 
                     b.ToTable("AdBuyers");
+
+                    b.HasData(
+                        new
+                        {
+                            BuyerId = "7a02b826-8f95-44b9-baa6-a4b9804daa3c",
+                            AdId = 1
+                        },
+                        new
+                        {
+                            BuyerId = "7a02b826-8f95-44b9-baa6-a4b9804daa3c",
+                            AdId = 2
+                        });
                 });
 
             modelBuilder.Entity("SoftUniBazar.Infrastructure.Data.Models.Category", b =>

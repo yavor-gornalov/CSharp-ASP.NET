@@ -143,48 +143,49 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                         {
                             Id = "493ba206-c3d5-4f28-8372-7824f4bbcf9e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0cda6a1e-4a81-4c98-9d50-007f2ac4205e",
+                            ConcurrencyStamp = "e7423796-f215-4331-bca3-599a91780e0e",
                             Email = "guest@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "GUEST@SOFTUNI.COM",
-                            NormalizedUserName = "guest",
-                            PasswordHash = "AQAAAAIAAYagAAAAELOwN5ql0C6CcMPZkF29euOng/OSmwxjL5zARdbqcDtiDNiuIH4lsU4VHLGfXY1k3A==",
+                            NormalizedUserName = "GUEST@SOFTUNI.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJY4c5Nof/fttgzbg1E6Z6n1hxsV4rH4o90cbH4GolMK/8hDeB1nSNvAl4fATFTcwg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "726fb172-69e0-4b8c-9a8d-b8928ff942da",
+                            SecurityStamp = "2abcfaf0-7487-4405-a129-124fd1f3fd87",
                             TwoFactorEnabled = false,
-                            UserName = "guest"
+                            UserName = "guest@softuni.com"
                         },
                         new
                         {
                             Id = "7a02b826-8f95-44b9-baa6-a4b9804daa3c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "02995dba-82d0-443c-ad8a-a4060ae7b7dc",
+                            ConcurrencyStamp = "9d4f5add-2f66-4082-86d3-30f79bca1571",
                             Email = "buyer@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "BUYER@SOFTUNI.COM",
-                            NormalizedUserName = "buyer",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDxoASOeVEfuqI5wfnnvhSwiYK3lygBDKR/79MQQnpqdJEL04sc7Z/6maw0+r7Eq/Q==",
+                            NormalizedUserName = "BUYER@SOFTUNI.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEE3qz/ngUVnwWHU9RXG/+kurJBN0Zc31CCzxjZg+eO52P1gk+23cgtyn/Ug6KBGqlQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "75ff625c-3ab9-4567-b7ab-9f1eaf3635f5",
+                            SecurityStamp = "d85c27ad-6af0-4443-9338-602798c647f3",
                             TwoFactorEnabled = false,
-                            UserName = "buyer"
+                            UserName = "buyer@softuni.com"
                         },
                         new
                         {
                             Id = "0b5ca5a6-5732-4895-a96c-cce811834780",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ddab6020-948d-4adb-8b8e-e0e949cf3619",
+                            ConcurrencyStamp = "8e79271c-e0ec-49d0-aada-02a31a07aef6",
                             Email = "seller@softuni.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "SELLER@SOFTUNI.COM",
-                            NormalizedUserName = "seller",
+                            NormalizedUserName = "SELLER@SOFTUNI.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEB9wfmnYGuxuRBTq/zRTtSbM8nY8wBdIFxefhA+zyM0GdwGjdHqj/hUDEIvKxMr20w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "12a3f99d-439e-4b90-900b-eff58daa7bce",
+                            SecurityStamp = "aa00a083-2e30-4111-818a-2b8faa9f36d1",
                             TwoFactorEnabled = false,
-                            UserName = "seller"
+                            UserName = "seller@softuni.com"
                         });
                 });
 
@@ -321,23 +322,23 @@ namespace SoftUniBazar.Infrastructure.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 4,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2024, 9, 15, 19, 15, 0, 0, DateTimeKind.Unspecified),
                             Description = "I have three flowers for selling. They love sunlight and need watering three times a week.",
                             ImageUrl = "https://hips.hearstapps.com/hmg-prod/images/spring-flowers-65de4a13478ee.jpg",
                             Name = "Flowers",
-                            OwnerId = "493ba206-c3d5-4f28-8372-7824f4bbcf9e",
+                            OwnerId = "0b5ca5a6-5732-4895-a96c-cce811834780",
                             Price = 15m
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedOn = new DateTime(2024, 9, 17, 14, 30, 0, 0, DateTimeKind.Unspecified),
                             Description = "I have a car for selling. It is in a good condition and has a new battery.",
                             ImageUrl = "https://listings-prod.tcimg.net/listings/146110/48/82/1G1FW6S05P4138248/BF5GFZDUSPJ4G6VPYYJCY4WJV4-og-860.jpg",
                             Name = "Car",
-                            OwnerId = "493ba206-c3d5-4f28-8372-7824f4bbcf9e",
-                            Price = 15000m
+                            OwnerId = "0b5ca5a6-5732-4895-a96c-cce811834780",
+                            Price = 12000m
                         });
                 });
 
