@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SoftUniBazar.Infrastructure.Data.Extensions;
 using SoftUniBazar.Infrastructure.Data.Models;
+using SoftUniBazar.Infrastructure.Extensions;
 
 namespace SoftUniBazar.Infrastructure.Data;
 
