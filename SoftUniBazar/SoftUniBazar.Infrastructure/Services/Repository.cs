@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SoftUniBazar.Infrastructure.Contracts;
+using SoftUniBazar.Infrastructure.Data;
 
 namespace SoftUniBazar.Infrastructure.Services;
 
@@ -7,7 +8,7 @@ public class Repository : IRepository
 {
     private readonly DbContext context;
 
-    public Repository(DbContext context)
+    public Repository(BazarDbContext context)
     {
         this.context = context;
     }
