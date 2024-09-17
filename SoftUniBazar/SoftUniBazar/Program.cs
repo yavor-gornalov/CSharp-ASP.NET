@@ -26,6 +26,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<IAdService, AdService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

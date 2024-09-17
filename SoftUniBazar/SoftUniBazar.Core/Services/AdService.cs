@@ -15,6 +15,25 @@ public class AdService : IAdService
         this.repository = repository;
     }
 
+    public async Task<int> AddAsync(AdAddViewModel model, string ownerId)
+    {
+        var ad = new Ad
+        {
+            Name = model.Name,
+            Description = model.Description,
+            Price = model.Price,
+            ImageUrl = model.ImageUrl,
+            OwnerId = ownerId,
+            CategoryId = model.CategoryId,
+            CreatedOn = DateTime.Now,
+        };
+
+        await repository.AddAsync(ad);
+        await repository.SaveChangesAsync();
+
+        return ad.Id;
+    }
+
     public async Task<IEnumerable<AdAllViewModel>> AllAsync()
     {
         return await repository.All<Ad>()
