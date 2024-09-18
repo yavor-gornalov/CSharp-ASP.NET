@@ -3,7 +3,7 @@ using static SoftUniBazar.Infrastructure.Common.ValidationConstants.Ad;
 
 namespace SoftUniBazar.Core.Models;
 
-public class AdAddViewModel
+public class AdServiceModel
 {
     [Required]
     [StringLength(NameMaxLength, MinimumLength = NameMinLength, 
@@ -20,8 +20,8 @@ public class AdAddViewModel
     public string ImageUrl { get; set; } = null!;
 
     [Required]
-    [Range(MinPrice, MaxPrice, ErrorMessage = "Price must be a positive value.")]
-    public decimal Price { get; set; }
+    //[Range(MinPrice, MaxPrice, ErrorMessage = "Price must be a positive value.")]
+    public string Price { get; set; } = null!;
 
     [Required]
     [Display(Name = "Category")]

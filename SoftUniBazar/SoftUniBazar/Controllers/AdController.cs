@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SoftUniBazar.Core.Contracts;
 using SoftUniBazar.Core.Models;
 
@@ -29,16 +30,18 @@ public class AdController : BaseController
     {
         var categories = await categoryService.AllAsync();
 
-        return View(new AdAddViewModel
+        return View(new AdServiceModel
         {
             Categories = categories
         });
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add (AdAddViewModel model)
+    public async Task<IActionResult> Add(AdServiceModel model)
     {
-        if (!IsUserLoggedIn)
+        var ownerId = UserId;
+
+        if (!IsUserLoggedIn || ownerId == null)
         {
             return Unauthorized();
         }
@@ -54,8 +57,66 @@ public class AdController : BaseController
             return View(model);
         }
 
-        var ownerId = UserId;
         await adService.AddAsync(model, ownerId);
+
+        return RedirectToAction(nameof(All));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var ad = await adService.GetByIdAsync(id);
+
+        if (ad == null)
+        {
+            return NotFound();
+        }
+
+        if (!IsUserLoggedIn || ad.OwnerId != UserId)
+        {
+            return Unauthorized();
+        }
+
+        var model = new AdServiceModel
+        {
+            Name = ad.Name,
+            Description = ad.Description,
+            Price = ad.Price.ToString(),
+            ImageUrl = ad.ImageUrl,
+            CategoryId = ad.CategoryId,
+            Categories = await categoryService.AllAsync()
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, AdServiceModel model)
+    {
+        var ad = await adService.GetByIdAsync(id);
+
+        if (ad == null)
+        {
+            return NotFound();
+        }
+
+        if (!IsUserLoggedIn || ad.OwnerId != UserId)
+        {
+            return Unauthorized();
+        }
+
+        if (await categoryService.ExistsAsync(model.CategoryId) == false)
+        {
+            ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            model.Categories = await categoryService.AllAsync();
+            return View(model);
+        }
+
+        await adService.EditAsync(id, model);
 
         return RedirectToAction(nameof(All));
     }

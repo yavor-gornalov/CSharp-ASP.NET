@@ -15,13 +15,13 @@ public class AdService : IAdService
         this.repository = repository;
     }
 
-    public async Task<int> AddAsync(AdAddViewModel model, string ownerId)
+    public async Task<int> AddAsync(AdServiceModel model, string ownerId)
     {
         var ad = new Ad
         {
             Name = model.Name,
             Description = model.Description,
-            Price = model.Price,
+            Price = decimal.Parse(model.Price),
             ImageUrl = model.ImageUrl,
             OwnerId = ownerId,
             CategoryId = model.CategoryId,
@@ -49,5 +49,30 @@ public class AdService : IAdService
                 Owner = a.Owner.UserName ?? string.Empty
             })
             .ToListAsync();
+    }
+
+    public async Task EditAsync(int id, AdServiceModel model)
+    {
+        var ad = await repository.FindAsync<Ad>(id);
+
+        if (ad == null)
+        {
+            return;
+        }
+
+        ad.Name = model.Name;
+        ad.Description = model.Description;
+        ad.Price = decimal.Parse(model.Price);
+        ad.ImageUrl = model.ImageUrl;
+        ad.CategoryId = model.CategoryId;
+
+        await repository.SaveChangesAsync();
+    }
+
+    public async Task<Ad?> GetByIdAsync(int id)
+    {
+        return await repository.All<Ad>()
+            .Where(a => a.Id == id)
+            .FirstOrDefaultAsync();
     }
 }
