@@ -81,7 +81,7 @@ public class AdController : BaseController
         {
             Name = ad.Name,
             Description = ad.Description,
-            Price = ad.Price.ToString(),
+            Price = ad.Price,
             ImageUrl = ad.ImageUrl,
             CategoryId = ad.CategoryId,
             Categories = await categoryService.AllAsync()

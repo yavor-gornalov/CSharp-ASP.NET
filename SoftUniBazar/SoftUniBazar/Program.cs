@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.EntityFrameworkCore;
 using SoftUniBazar.Core.Contracts;
 using SoftUniBazar.Core.Services;
+using SoftUniBazar.CustomModelBinder;
 using SoftUniBazar.Infrastructure.Contracts;
 using SoftUniBazar.Infrastructure.Data;
 using SoftUniBazar.Infrastructure.Services;
@@ -27,15 +30,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<IAdService, AdService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddControllersWithViews();
 
-
-builder.Services.Configure<RequestLocalizationOptions>(options =>
+builder.Services.AddControllersWithViews(options =>
 {
-    var supportedCultures = new[] { "en-US" };
-    options.SetDefaultCulture(supportedCultures[0])
-        .AddSupportedCultures(supportedCultures)
-        .AddSupportedUICultures(supportedCultures);
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
 
 var app = builder.Build();

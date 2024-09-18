@@ -6,12 +6,12 @@ namespace SoftUniBazar.Core.Models;
 public class AdServiceModel
 {
     [Required]
-    [StringLength(NameMaxLength, MinimumLength = NameMinLength, 
+    [StringLength(NameMaxLength, MinimumLength = NameMinLength,
         ErrorMessage = "The {0} must be between {2} and {1} characters.")]
     public string Name { get; set; } = null!;
 
     [Required]
-    [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength, 
+    [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength,
         ErrorMessage = "The {0} must be between {2} and {1} characters.")]
     public string Description { get; set; } = null!;
 
@@ -20,8 +20,8 @@ public class AdServiceModel
     public string ImageUrl { get; set; } = null!;
 
     [Required]
-    //[Range(MinPrice, MaxPrice, ErrorMessage = "Price must be a positive value.")]
-    public string Price { get; set; } = null!;
+    [Range(MinPrice, MaxPrice, ErrorMessage = "Price must be a positive value.")]
+    public decimal Price { get; set; }
 
     [Required]
     [Display(Name = "Category")]

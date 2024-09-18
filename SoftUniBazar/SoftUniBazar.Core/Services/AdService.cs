@@ -21,7 +21,7 @@ public class AdService : IAdService
         {
             Name = model.Name,
             Description = model.Description,
-            Price = decimal.Parse(model.Price),
+            Price = model.Price,
             ImageUrl = model.ImageUrl,
             OwnerId = ownerId,
             CategoryId = model.CategoryId,
@@ -62,7 +62,7 @@ public class AdService : IAdService
 
         ad.Name = model.Name;
         ad.Description = model.Description;
-        ad.Price = decimal.Parse(model.Price);
+        ad.Price = model.Price;
         ad.ImageUrl = model.ImageUrl;
         ad.CategoryId = model.CategoryId;
 
