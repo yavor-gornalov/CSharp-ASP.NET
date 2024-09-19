@@ -16,4 +16,6 @@ public interface IAdService
     Task AddToCartAsync(int id, string userId);
 
     Task<ICollection<AdAllViewModel>> GetUserAdsAsync(string ownerId);
+
+    Task RemoveFromCartAsync(int adId, string ownerId);
 }

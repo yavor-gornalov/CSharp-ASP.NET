@@ -108,4 +108,18 @@ public class AdService : IAdService
             })
             .ToListAsync();
     }
+
+    public async Task RemoveFromCartAsync(int adId, string ownerId)
+    {
+        var ad = repository.All<Ad>()
+            .Include(a => a.AdBuyers)
+            .Where(a => a.Id == adId)
+            .FirstOrDefault();
+
+        if (ad != null || !ad.AdBuyers.Any(ab => ab.BuyerId == ownerId))
+        {
+            ad.AdBuyers.Remove(ad.AdBuyers.First(ab => ab.BuyerId == ownerId));
+            await repository.SaveChangesAsync();
+        }
+    }
 }

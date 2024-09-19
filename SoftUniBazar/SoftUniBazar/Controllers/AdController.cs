@@ -146,6 +146,25 @@ public class AdController : BaseController
 
     }
 
+    public async Task<IActionResult> RemoveFromCart(int id)
+    {
+        var ad = await adService.GetByIdAsync(id);
+
+        if (ad == null)
+        {
+            return NotFound();
+        }
+
+        if (!IsUserLoggedIn || UserId == null)
+        {
+            return Unauthorized();
+        }
+
+        await adService.RemoveFromCartAsync(id, UserId);
+
+        return RedirectToAction(nameof(Cart));
+    }
+
     public async Task<IActionResult> Cart()
     {
         var ownerId = UserId;
