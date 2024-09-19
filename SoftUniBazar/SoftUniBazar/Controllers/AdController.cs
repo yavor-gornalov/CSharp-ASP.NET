@@ -120,4 +120,43 @@ public class AdController : BaseController
 
         return RedirectToAction(nameof(All));
     }
+
+    public async Task<IActionResult> AddToCart(int id)
+    {
+        var ad = await adService.GetByIdAsync(id);
+
+        if (ad == null)
+        {
+            return NotFound();
+        }
+
+        if (!IsUserLoggedIn || UserId == null)
+        {
+            return Unauthorized();
+        }
+
+        if (ad.OwnerId == UserId)
+        {
+            return BadRequest();
+        }
+
+        await adService.AddToCartAsync(id, UserId);
+
+        return RedirectToAction(nameof(Cart));
+
+    }
+
+    public async Task<IActionResult> Cart()
+    {
+        var ownerId = UserId;
+
+        if (ownerId == null)
+        {
+            return Unauthorized();
+        }
+
+        var model = await adService.GetUserAdsAsync(ownerId);
+
+        return View(model);
+    }
 }
