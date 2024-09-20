@@ -140,9 +140,12 @@ public class AdController : BaseController
             return BadRequest();
         }
 
-        await adService.AddToCartAsync(id, UserId);
+        if (await adService.AddToCartAsync(id, UserId))
+        {
+            return RedirectToAction(nameof(Cart));
+        }
 
-        return RedirectToAction(nameof(Cart));
+        return RedirectToAction(nameof(All));
 
     }
 

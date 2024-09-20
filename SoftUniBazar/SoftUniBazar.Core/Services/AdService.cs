@@ -34,9 +34,12 @@ public class AdService : IAdService
         return ad.Id;
     }
 
-    public async Task AddToCartAsync(int id, string userId)
+    public async Task<bool> AddToCartAsync(int id, string userId)
     {
-        var ad = await repository.FindAsync<Ad>(id);
+        var ad = await repository.All<Ad>()
+            .Include(a => a.AdBuyers)
+            .Where(a => a.Id == id)
+            .FirstOrDefaultAsync();
 
         if (ad != null && !ad.AdBuyers.Any(ab => ab.BuyerId == userId))
         {
@@ -46,7 +49,9 @@ public class AdService : IAdService
                 BuyerId = userId
             });
             await repository.SaveChangesAsync();
+            return true;
         }
+        return false;
     }
 
     public async Task<IEnumerable<AdAllViewModel>> AllAsync()

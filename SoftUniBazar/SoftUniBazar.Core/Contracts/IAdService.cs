@@ -13,7 +13,7 @@ public interface IAdService
 
     Task EditAsync(int id, AdServiceModel model);
 
-    Task AddToCartAsync(int id, string userId);
+    Task<bool> AddToCartAsync(int id, string userId);
 
     Task<ICollection<AdAllViewModel>> GetUserAdsAsync(string ownerId);
 
